@@ -3,14 +3,105 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/list_background"
     tools:context=".activity.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_alignParentBottom="true"
+        android:background="@color/bottom_text_color_normal">
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+
+            >
+
+            <RadioButton
+                android:id="@+id/rb_item_newgood"
+                android:drawableTop="@drawable/selector_menu_item_new_good"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@null"
+                android:drawablePadding="10dp"
+                android:gravity="center_horizontal"
+                android:text="新品"
+                android:textColor="@color/main_botton_text_color" />
+
+            <RadioButton
+                android:id="@+id/rb_item_boutique"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@null"
+                android:drawablePadding="10dp"
+                android:drawableTop="@drawable/selector_menu_item_boutique"
+                android:gravity="center_horizontal"
+                android:text="精选"
+                android:textColor="@color/main_botton_text_color" />
+
+            <RadioButton
+                android:id="@+id/rb_item_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@null"
+                android:drawablePadding="10dp"
+                android:drawableTop="@drawable/selector_menu_item_category"
+                android:gravity="center_horizontal"
+                android:text="分类"
+                android:textColor="@color/main_botton_text_color" />
+
+            <RelativeLayout
+                android:id="@+id/rl_cart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tv_cart_hint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginLeft="30sp"
+                    android:background="@drawable/cart_hint"
+                    android:text="55"
+                    android:textColor="#fcfc04"
+                    android:textSize="10dp" />
+
+                <RadioButton
+                    android:id="@+id/rb_item_cart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawablePadding="10dp"
+                    android:drawableTop="@drawable/selector_menu_item_cart"
+                    android:gravity="center_horizontal"
+                    android:text="购物车"
+                    android:textColor="@color/main_botton_text_color" />
+
+            </RelativeLayout>
+
+
+            <RadioButton
+                android:id="@+id/rb_item_personal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:button="@null"
+                android:drawablePadding="10dp"
+                android:drawableTop="@drawable/selector_menu_item_personal_center"
+                android:gravity="center_horizontal"
+                android:text="我"
+                android:textColor="@color/main_botton_text_color" />
+        </RadioGroup>
+
+
+    </LinearLayout>
+
+
 </RelativeLayout>
