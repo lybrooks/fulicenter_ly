@@ -3,7 +3,7 @@ package cn.ucai.fulicenter.utils;
 import android.app.Activity;
 import android.content.Intent;
 
-import day.myfulishe.MainActivity;
+import day.myfulishe.activity.MainActivity;
 import day.myfulishe.R;
 
 
