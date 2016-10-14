@@ -19,23 +19,28 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        final long start = System.currentTimeMillis();
+
         super.onStart();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                long end = System.currentTimeMillis();
-                if (end - start < splashtime) {
+                final long start = System.currentTimeMillis();
+                long costtime = System.currentTimeMillis() - start;
+                if (splashtime - costtime > 0) {
                     try {
-                        Thread.sleep(splashtime);
+                        Thread.sleep(splashtime - costtime);
                         startActivity(new Intent(SplashActivity.this, MainActivity.class));
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
-
             }
         }).start();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
         finish();
 
     }
