@@ -6,6 +6,7 @@ import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import cn.ucai.fulicenter.utils.MFGT;
 import day.myfulishe.R;
 
 public class SplashActivity extends AppCompatActivity {
@@ -29,10 +30,11 @@ public class SplashActivity extends AppCompatActivity {
                 if (splashtime - costtime > 0) {
                     try {
                         Thread.sleep(splashtime - costtime);
-                        startActivity(new Intent(SplashActivity.this, MainActivity.class));
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+
+                    MFGT.gotoMainActivity(SplashActivity.this);
                 }
             }
         }).start();
@@ -41,7 +43,6 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        finish();
-
+        MFGT.finish(SplashActivity.this);
     }
 }
