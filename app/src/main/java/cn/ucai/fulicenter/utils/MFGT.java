@@ -4,12 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 
 import day.myfulishe.MainActivity;
+import day.myfulishe.R;
 
 
 public class MFGT {
     public static void finish(Activity activity){
         activity.finish();
-        activity.overridePendingTransition(R.anim.push_right_in,R.anim.push_right_out);
+        activity.overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
     }
     public static void gotoMainActivity(Activity context){
         startActivity(context, MainActivity.class);

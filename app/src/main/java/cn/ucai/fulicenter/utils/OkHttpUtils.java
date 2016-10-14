@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import cn.ucai.fulicenter.FuLiCenterApplication;
+//import cn.ucai.fulicenter.FuLiCenterApplication;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.bean.Result;
 import okhttp3.Cache;
@@ -144,20 +144,20 @@ public class OkHttpUtils<T> {
 
 
     private void initHandler() {
-        mHandler = new Handler(FuLiCenterApplication.applicationContext.getMainLooper()) {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case RESULT_ERROR:
-                        mListener.onError(msg.obj==null?msg.toString():msg.obj.toString());
-                        break;
-                    case RESULT_SUCCESS:
-                        T result = (T) msg.obj;
-                        mListener.onSuccess(result);
-                        break;
-                }
-            }
-        };
+//        mHandler = new Handler(FuLiCenterApplication.applicationContext.getMainLooper()) {
+//            @Override
+//            public void handleMessage(Message msg) {
+//                switch (msg.what) {
+//                    case RESULT_ERROR:
+//                        mListener.onError(msg.obj==null?msg.toString():msg.obj.toString());
+//                        break;
+//                    case RESULT_SUCCESS:
+//                        T result = (T) msg.obj;
+//                        mListener.onSuccess(result);
+//                        break;
+//                }
+//            }
+//        };
     }
 
     /**
