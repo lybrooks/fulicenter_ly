@@ -21,37 +21,25 @@
 
             <RadioButton
                 android:id="@+id/rb_item_newgood"
-                android:drawableTop="@drawable/selector_menu_item_new_good"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                style="@style/menu_item_style"
                 android:button="@null"
-                android:drawablePadding="10dp"
-                android:gravity="center_horizontal"
+                android:drawableTop="@drawable/selector_menu_item_new_good"
                 android:text="新品"
                 android:textColor="@color/main_botton_text_color" />
 
             <RadioButton
                 android:id="@+id/rb_item_boutique"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                style="@style/menu_item_style"
                 android:button="@null"
-                android:drawablePadding="10dp"
                 android:drawableTop="@drawable/selector_menu_item_boutique"
-                android:gravity="center_horizontal"
                 android:text="精选"
                 android:textColor="@color/main_botton_text_color" />
 
             <RadioButton
                 android:id="@+id/rb_item_category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                style="@style/menu_item_style"
                 android:button="@null"
-                android:drawablePadding="10dp"
                 android:drawableTop="@drawable/selector_menu_item_category"
-                android:gravity="center_horizontal"
                 android:text="分类"
                 android:textColor="@color/main_botton_text_color" />
 
@@ -82,20 +70,18 @@
                     android:drawableTop="@drawable/selector_menu_item_cart"
                     android:gravity="center_horizontal"
                     android:text="购物车"
-                    android:textColor="@color/main_botton_text_color" />
+                    android:textColor="@color/main_botton_text_color"
+                    android:onClick="onCheckedChange"
+                    />
 
             </RelativeLayout>
 
 
             <RadioButton
                 android:id="@+id/rb_item_personal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                style="@style/menu_item_style"
                 android:button="@null"
-                android:drawablePadding="10dp"
                 android:drawableTop="@drawable/selector_menu_item_personal_center"
-                android:gravity="center_horizontal"
                 android:text="我"
                 android:textColor="@color/main_botton_text_color" />
         </RadioGroup>

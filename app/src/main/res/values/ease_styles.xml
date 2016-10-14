@@ -199,22 +199,20 @@
     </style>
     <!-- 菜单项属性的style-->
     <style name="menu_item_style">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:drawablePadding">7dp</item>
         <item name="android:gravity">center</item>
         <item name="android:paddingTop">7dp</item>
-        <item name="android:textColor">#fff</item>
+        <item name="android:textColor">@color/main_botton_text_color</item>
         <item name="android:onClick">onCheckedChange</item>
     </style>
     <style name="menu_item_style_cart">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:drawablePadding">7dp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:paddingTop">7dp</item>
+        <item name="android:gravity">center_horizontal</item>
         <item name="android:textColor">#fff</item>
         <item name="android:onClick">onCheckedChange</item>
     </style>
