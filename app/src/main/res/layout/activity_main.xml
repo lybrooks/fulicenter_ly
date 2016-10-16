@@ -5,21 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/list_background"
     tools:context=".activity.MainActivity">
-<!--
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/main_srl"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/Linear2">
 
-        <FrameLayout
-            android:id="@+id/main_fragment"
-            tools:layout="@layout/fragment_newgoods"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/Linear2"
-            android:orientation="horizontal"/>
-    </android.support.v4.widget.SwipeRefreshLayout>-->
     <android.support.v4.view.ViewPager
         android:id="@+id/main_fragment"
         tools:layout="@layout/fragment_newgoods"

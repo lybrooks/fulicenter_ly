@@ -31,13 +31,13 @@ public class fragment_newgoods extends Fragment {
     final static int ACTION_DOWNLOAD = 0;
     final static int ACTION_PULL_DOWN = 1;
     public final static int ACTION_PULL_UP = 2;
-    public LinearLayoutManager layoutManger;
+    public GridLayoutManager layoutManger;
     ArrayList<NewGoodsBean> NewGoodsBeanlist;
     public myDdapter mAdapter;
     public RecyclerView mrv;
 
     int mNewState;
-    int PageId;
+    int PageId = 1;
 
     public fragment_newgoods() {
         // Required empty public constructor
@@ -52,8 +52,13 @@ public class fragment_newgoods extends Fragment {
         NewGoodsBeanlist = new ArrayList<>();
         mAdapter = new myDdapter(getContext(), NewGoodsBeanlist);
         layoutManger = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
-        // layoutManger = new GridLayoutManager(getActivity(), 2);
-        downloadContactList(ACTION_DOWNLOAD, 1);
+        layoutManger.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return position == mAdapter.getItemCount() - 1 ? 2 : 1;
+            }
+        });
+        downloadContactList(ACTION_DOWNLOAD, PageId);
         mrv.setLayoutManager(layoutManger);
         mrv.setAdapter(mAdapter);
         setListener();
@@ -226,7 +231,6 @@ public class fragment_newgoods extends Fragment {
             }
             ContactViewHolder contactViewHolder = (ContactViewHolder) holder;
             NewGoodsBean goodsBean = contactList.get(position);
-            // L.i(goodsBean.getGoodsName());
             contactViewHolder.Goods_name.setText(goodsBean.getGoodsName());
             contactViewHolder.Goods_prize.setText(goodsBean.getCurrencyPrice());
             ImageLoader.build(I.SERVER_ROOT + I.REQUEST_DOWNLOAD_IMAGE)
