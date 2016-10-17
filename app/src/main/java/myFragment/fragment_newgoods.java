@@ -3,6 +3,7 @@ package myFragment;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -27,7 +28,7 @@ import cn.ucai.fulicenter.utils.ImageLoader;
 import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import day.myfulishe.R;
-import day.myfulishe.activity.MainActivity;
+import day.myfulishe.activity.Deails;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -81,7 +82,6 @@ public class Fragment_newgoods extends Fragment {
             public void onSuccess(NewGoodsBean[] result) {
                 if (result != null && result.length > 0 && mAdapter.isMore) {
                     ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
-                    L.i(list.toString());
                     switch (action) {
                         case I.ACTION_DOWNLOAD:
                             mAdapter.setFooter("加载更多数据");
@@ -119,7 +119,6 @@ public class Fragment_newgoods extends Fragment {
                 if (Lastposition >= mAdapter.getItemCount() - 1 && newState == RecyclerView.SCROLL_STATE_IDLE &&
                         mAdapter.isMore) {
                     PageId++;
-                    L.i(PageId + "");
                     initData(I.ACTION_PULL_UP, PageId);
                 }
             }
@@ -129,7 +128,21 @@ public class Fragment_newgoods extends Fragment {
         mAdapter.setMyOnClick(new MyOnClickListener() {
             @Override
             public void OnClick(View view, int position) {
-                Toast.makeText(getContext(), "点击事件", Toast.LENGTH_SHORT).show();
+                Intent intent  = new Intent(getContext(), Deails.class);
+                String currencyPrice = mAdapter.contactList.get(position).getCurrencyPrice();
+                String goodsEnglishName = mAdapter.contactList.get(position).getGoodsEnglishName();
+                String goodsName = mAdapter.contactList.get(position).getGoodsName();
+                String colorName = mAdapter.contactList.get(position).getColorName();
+                String goodsThumb = mAdapter.contactList.get(position).getGoodsThumb();
+                intent.putExtra("Price",currencyPrice);
+                intent.putExtra("EnglishName",goodsEnglishName);
+                intent.putExtra("goodName",goodsName);
+                intent.putExtra("colorName",colorName);
+                intent.putExtra("goodsThumb",goodsThumb);
+                startActivity(intent);
+
+
+
             }
         });
 
