@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
 import cn.ucai.fulicenter.utils.ImageLoader;
@@ -37,6 +39,7 @@ public class Fragment_newgoods extends Fragment {
     int mNewState;
     int PageId = 1;
 
+
     public Fragment_newgoods() {
     }
 
@@ -59,6 +62,7 @@ public class Fragment_newgoods extends Fragment {
         mrv.setLayoutManager(layoutManger);
         mrv.setAdapter(mAdapter);
         setListener();
+        ButterKnife.bind(this, view);
         return view;
     }
 
@@ -124,7 +128,13 @@ public class Fragment_newgoods extends Fragment {
 
     }
 
-    class ContactViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
+/*    class ContactViewHolder extends RecyclerView.ViewHolder {
         ImageView Googs_img;
         TextView Goods_name, Goods_prize;
 
@@ -133,22 +143,45 @@ public class Fragment_newgoods extends Fragment {
             Googs_img = (ImageView) itemView.findViewById(R.id.iv_goods_img);
             Goods_name = (TextView) itemView.findViewById(R.id.tv_good_name);
             Goods_prize = (TextView) itemView.findViewById(R.id.tv_good_prize);
+        }
+    }*/
 
+    class ContactViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.iv_goods_img)
+        ImageView Googs_img;
+        @Bind(R.id.tv_good_name)
+        TextView Goods_name;
+        @Bind(R.id.tv_good_prize)
+        TextView Goods_prize;
+
+        ContactViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
         }
     }
 
-    class FooterViewHolder extends RecyclerView.ViewHolder {
+ /*   class FooterViewHolder extends RecyclerView.ViewHolder {
         TextView mtvFooter;
 
         public FooterViewHolder(View itemView) {
             super(itemView);
             mtvFooter = (TextView) itemView.findViewById(R.id.tv_item_footer);
         }
+    }*/
+    class FooterViewHolder extends RecyclerView.ViewHolder {
+        @Bind(R.id.tv_item_footer)
+        TextView mtvFooter;
+
+     FooterViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
     }
 
     class myDdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         final static int TYPE_ITEM = 0;
         final static int TYPE_FOOTER = 1;
+
 
         public myDdapter(Context context, ArrayList<NewGoodsBean> contactList) {
             this.context = context;
@@ -252,6 +285,9 @@ public class Fragment_newgoods extends Fragment {
             return TYPE_ITEM;
 
         }
+
+
+
     }
 
 

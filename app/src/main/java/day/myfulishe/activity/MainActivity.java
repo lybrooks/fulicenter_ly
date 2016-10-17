@@ -26,7 +26,6 @@ import myFragment.Fragment_personal;
 public class MainActivity extends AppCompatActivity {
 
     FragmentManager fragmentManager;
-    FragmentTransaction transaction;
     ArrayList<Fragment> fragmentArrayList = new ArrayList<>();
     @Bind(R.id.main_fragment)
     ViewPager mVP;
@@ -68,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment_category category = new Fragment_category();
         Fragment_cart cart = new Fragment_cart();
         Fragment_personal personal = new Fragment_personal();
+
         fragmentArrayList.add(newgoods);
         fragmentArrayList.add(boutique);
         fragmentArrayList.add(category);
@@ -76,6 +76,22 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentManager = getSupportFragmentManager();
         MyViewPage VP_Adapter = new MyViewPage(fragmentManager, fragmentArrayList);
+/*        mVP.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });*/
         mVP.setAdapter(VP_Adapter);
 
 
@@ -99,11 +115,10 @@ public class MainActivity extends AppCompatActivity {
                 index = 4;
                 break;
         }
-        setRadioButtonStatus();
-        
+        setViewPageAndRadioButtonStatus();
     }
 
-    private void setRadioButtonStatus() {
+    private void setViewPageAndRadioButtonStatus() {
         for (int i = 0; i < mrb.length; i++) {
             if (i == index) {
                 mVP.setCurrentItem(i);
