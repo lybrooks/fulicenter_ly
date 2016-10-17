@@ -2,8 +2,10 @@ package myFragment;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -18,19 +21,20 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
+import cn.ucai.fulicenter.net.NetDao;
+import cn.ucai.fulicenter.utils.ConvertUtils;
 import cn.ucai.fulicenter.utils.ImageLoader;
 import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import day.myfulishe.R;
+import day.myfulishe.activity.MainActivity;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class Fragment_newgoods extends Fragment {
 
-    final static int ACTION_DOWNLOAD = 0;
-    final static int ACTION_PULL_DOWN = 1;
-    public final static int ACTION_PULL_UP = 2;
+
     public GridLayoutManager layoutManger;
     ArrayList<NewGoodsBean> NewGoodsBeanlist;
     public myDdapter mAdapter;
@@ -48,23 +52,60 @@ public class Fragment_newgoods extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_newgoods, container, false);
+        initView(view);
+        ButterKnife.bind(this, view);
+        initData(I.ACTION_DOWNLOAD, PageId);
+        setListener();
+        return view;
+    }
+
+    private void initView(View view) {
         mrv = (RecyclerView) view.findViewById(R.id.fag_rlv_newgoods);
         NewGoodsBeanlist = new ArrayList<>();
         mAdapter = new myDdapter(getContext(), NewGoodsBeanlist);
-        layoutManger = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
+        layoutManger = new GridLayoutManager(getContext(), I.COLUM_NUM, GridLayoutManager.VERTICAL, false);
         layoutManger.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
                 return position == mAdapter.getItemCount() - 1 ? 2 : 1;
             }
         });
-        downloadContactList(ACTION_DOWNLOAD, PageId);
         mrv.setLayoutManager(layoutManger);
+        mrv.setHasFixedSize(true);
         mrv.setAdapter(mAdapter);
-        setListener();
-        ButterKnife.bind(this, view);
-        return view;
     }
+
+    private void initData(final int action, int PageId) {
+        NetDao.downloadNewGoods(getContext(), PageId, new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
+            @Override
+            public void onSuccess(NewGoodsBean[] result) {
+                if (result != null && result.length > 0 && mAdapter.isMore) {
+                    ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
+                    L.i(list.toString());
+                    switch (action) {
+                        case I.ACTION_DOWNLOAD:
+                            mAdapter.setFooter("加载更多数据");
+                            mAdapter.inintContact(list);
+                            break;
+                        case I.ACTION_PULL_DOWN:
+                            mAdapter.inintContact(list);
+                            break;
+                        case I.ACTION_PULL_UP:
+                            mAdapter.AddContactList(list);
+                            break;
+                    }
+                }else {
+                        mAdapter.setFooter("没有更多数据了");
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+    }
+
 
     private void setListener() {
         mrv.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -78,19 +119,29 @@ public class Fragment_newgoods extends Fragment {
                 if (Lastposition >= mAdapter.getItemCount() - 1 && newState == RecyclerView.SCROLL_STATE_IDLE &&
                         mAdapter.isMore) {
                     PageId++;
-                    downloadContactList(Fragment_newgoods.ACTION_PULL_UP, PageId);
+                    L.i(PageId + "");
+                    initData(I.ACTION_PULL_UP, PageId);
                 }
             }
 
         });
+
+        mAdapter.setMyOnClick(new MyOnClickListener() {
+            @Override
+            public void OnClick(View view, int position) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("商品信息").create().show();
+            }
+        });
+
     }
 
-    public void downloadContactList(final int action, int pageId) {
-        final OkHttpUtils<NewGoodsBean[]> utils = new OkHttpUtils<>();
+/*    public void downloadContactList(final int action, int pageId) {
+        final OkHttpUtils<NewGoodsBean[]> utils = new OkHttpUtils<>(getContext());
         utils.url(I.SERVER_ROOT + I.REQUEST_FIND_NEW_BOUTIQUE_GOODS)
-                .addParam(I.GoodsDetails.KEY_CAT_ID, 0 + "")
-                .addParam(I.PAGE_ID, pageId + "")
-                .addParam(I.PAGE_SIZE, 10 + "")
+                .addParam(I.GoodsDetails.KEY_CAT_ID, String.valueOf(I.CAT_ID))
+                .addParam(I.PAGE_ID, String.valueOf(pageId))
+                .addParam(I.PAGE_SIZE, String.valueOf(I.PAGE_SIZE_DEFAULT))
                 .targetClass(NewGoodsBean[].class)
                 .execute(new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
                     @Override
@@ -98,22 +149,21 @@ public class Fragment_newgoods extends Fragment {
                         ArrayList<NewGoodsBean> goodsBeen = utils.array2List(result);
                         mAdapter.setMore(goodsBeen != null && goodsBeen.size() != 0);
                         if (!mAdapter.isMore) {
-                            if (action == ACTION_PULL_UP) {
+                            if (action == I.ACTION_PULL_UP) {
                                 mAdapter.setFooter("没有更多数据了");
                             }
                             return;
                         }
                         mAdapter.setFooter("加载更多数据");
                         switch (action) {
-                            case ACTION_DOWNLOAD:
+                            case I.ACTION_DOWNLOAD:
                                 mAdapter.setFooter("加载更多数据");
-
                                 mAdapter.inintContact(goodsBeen);
                                 break;
-                            case ACTION_PULL_DOWN:
+                            case I.ACTION_PULL_DOWN:
                                 mAdapter.inintContact(goodsBeen);
                                 break;
-                            case ACTION_PULL_UP:
+                            case I.ACTION_PULL_UP:
                                 mAdapter.AddContactList(goodsBeen);
                                 break;
                         }
@@ -126,7 +176,7 @@ public class Fragment_newgoods extends Fragment {
                     }
                 });
 
-    }
+    }*/
 
     @Override
     public void onDestroyView() {
@@ -153,35 +203,42 @@ public class Fragment_newgoods extends Fragment {
         TextView Goods_name;
         @Bind(R.id.tv_good_prize)
         TextView Goods_prize;
+        MyOnClickListener MyOnClick;
 
-        ContactViewHolder(View view) {
+        ContactViewHolder(View view, final MyOnClickListener MyonClick) {
             super(view);
             ButterKnife.bind(this, view);
+            this.MyOnClick = MyonClick;
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (MyOnClick == null) {
+                        MyOnClick.OnClick(v, getAdapterPosition());
+                    }
+                }
+            });
         }
     }
 
- /*   class FooterViewHolder extends RecyclerView.ViewHolder {
-        TextView mtvFooter;
+    /*   class FooterViewHolder extends RecyclerView.ViewHolder {
+           TextView mtvFooter;
 
-        public FooterViewHolder(View itemView) {
-            super(itemView);
-            mtvFooter = (TextView) itemView.findViewById(R.id.tv_item_footer);
-        }
-    }*/
+           public FooterViewHolder(View itemView) {
+               super(itemView);
+               mtvFooter = (TextView) itemView.findViewById(R.id.tv_item_footer);
+           }
+       }*/
     class FooterViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.tv_item_footer)
         TextView mtvFooter;
 
-     FooterViewHolder(View view) {
+        FooterViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
     }
 
     class myDdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        final static int TYPE_ITEM = 0;
-        final static int TYPE_FOOTER = 1;
-
 
         public myDdapter(Context context, ArrayList<NewGoodsBean> contactList) {
             this.context = context;
@@ -212,8 +269,17 @@ public class Fragment_newgoods extends Fragment {
             isMore = more;
         }
 
-        public boolean isMore;
+        public boolean isMore = true;
 
+        public MyOnClickListener getMyOnClick() {
+            return myOnClick;
+        }
+
+        public void setMyOnClick(MyOnClickListener myOnClick) {
+            this.myOnClick = myOnClick;
+        }
+
+        MyOnClickListener myOnClick;
 
         public void inintContact(ArrayList<NewGoodsBean> list) {
             this.contactList.clear();
@@ -233,19 +299,18 @@ public class Fragment_newgoods extends Fragment {
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            L.i("aaaaa");
             this.parent = parent;
             RecyclerView.ViewHolder holder = null;
             LayoutInflater inflater = LayoutInflater.from(context);
             View layout = null;
             switch (viewType) {
-                case TYPE_FOOTER:
+                case I.TYPE_FOOTER:
                     layout = inflater.inflate(R.layout.item_footer, parent, false);
                     holder = new FooterViewHolder(layout);
                     break;
-                case TYPE_ITEM:
+                case I.TYPE_ITEM:
                     layout = inflater.inflate(R.layout.item_contact, parent, false);
-                    holder = new ContactViewHolder(layout);
+                    holder = new ContactViewHolder(layout, myOnClick);
                     break;
 
             }
@@ -263,8 +328,7 @@ public class Fragment_newgoods extends Fragment {
             NewGoodsBean goodsBean = contactList.get(position);
             contactViewHolder.Goods_name.setText(goodsBean.getGoodsName());
             contactViewHolder.Goods_prize.setText(goodsBean.getCurrencyPrice());
-            ImageLoader.build(I.SERVER_ROOT + I.REQUEST_DOWNLOAD_IMAGE)
-                    .addParam(I.IMAGE_URL, goodsBean.getGoodsThumb())
+            ImageLoader.build(I.DOWNLOAD_IMG_URL + goodsBean.getGoodsThumb())
                     .height(200)
                     .width(200)
                     .imageView(contactViewHolder.Googs_img)
@@ -280,14 +344,15 @@ public class Fragment_newgoods extends Fragment {
         @Override
         public int getItemViewType(int position) {
             if (position == getItemCount() - 1) {
-                return TYPE_FOOTER;
+                return I.TYPE_FOOTER;
             }
-            return TYPE_ITEM;
+            return I.TYPE_ITEM;
 
         }
+    }
 
-
-
+    public interface MyOnClickListener {
+        void OnClick(View view, int position);
     }
 
 
