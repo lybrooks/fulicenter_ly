@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
@@ -26,7 +24,7 @@ import day.myfulishe.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class fragment_newgoods extends Fragment {
+public class Fragment_newgoods extends Fragment {
 
     final static int ACTION_DOWNLOAD = 0;
     final static int ACTION_PULL_DOWN = 1;
@@ -39,8 +37,7 @@ public class fragment_newgoods extends Fragment {
     int mNewState;
     int PageId = 1;
 
-    public fragment_newgoods() {
-        // Required empty public constructor
+    public Fragment_newgoods() {
     }
 
 
@@ -77,7 +74,7 @@ public class fragment_newgoods extends Fragment {
                 if (Lastposition >= mAdapter.getItemCount() - 1 && newState == RecyclerView.SCROLL_STATE_IDLE &&
                         mAdapter.isMore) {
                     PageId++;
-                    downloadContactList(fragment_newgoods.ACTION_PULL_UP, PageId);
+                    downloadContactList(Fragment_newgoods.ACTION_PULL_UP, PageId);
                 }
             }
 

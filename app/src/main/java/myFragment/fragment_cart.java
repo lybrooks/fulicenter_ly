@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import day.myfulishe.R;
 
 
-public class fragment_cart extends Fragment {
+public class Fragment_cart extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -23,7 +23,7 @@ public class fragment_cart extends Fragment {
 
 
 
-    public fragment_cart() {
+    public Fragment_cart() {
         // Required empty public constructor
     }
 

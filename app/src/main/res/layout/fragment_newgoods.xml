@@ -3,5 +3,5 @@
     android:id="@+id/fag_rlv_newgoods"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="myFragment.fragment_newgoods">
+    tools:context="myFragment.Fragment_newgoods">
 </android.support.v7.widget.RecyclerView>

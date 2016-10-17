@@ -1,7 +1,5 @@
 package myFragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,18 +11,18 @@ import day.myfulishe.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link fragment_personal.OnFragmentInteractionListener} interface
+ * {@link Fragment_personal.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link fragment_personal#newInstance} factory method to
+ * Use the {@link Fragment_personal#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class fragment_personal extends Fragment {
+public class Fragment_personal extends Fragment {
 
 
 
 
 
-    public fragment_personal() {
+    public Fragment_personal() {
         // Required empty public constructor
     }
 

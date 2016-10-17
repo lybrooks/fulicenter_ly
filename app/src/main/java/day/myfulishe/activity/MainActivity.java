@@ -1,70 +1,82 @@
 package day.myfulishe.activity;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RadioButton;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import cn.ucai.fulicenter.utils.L;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import day.myfulishe.R;
-import myFragment.fragment_boutique;
-import myFragment.fragment_cart;
-import myFragment.fragment_category;
-import myFragment.fragment_newgoods;
-import myFragment.fragment_personal;
+import myFragment.Fragment_boutique;
+import myFragment.Fragment_cart;
+import myFragment.Fragment_category;
+import myFragment.Fragment_newgoods;
+import myFragment.Fragment_personal;
+
 
 public class MainActivity extends AppCompatActivity {
-    RadioButton mrb_item_newgood, mrb_item_boutique, mrb_item_category, mrb_item_cart, mrb_item_personal;
+
     FragmentManager fragmentManager;
     FragmentTransaction transaction;
-    // public static SwipeRefreshLayout mSwipeRefreshLayout;
     ArrayList<Fragment> fragmentArrayList = new ArrayList<>();
+    @Bind(R.id.main_fragment)
     ViewPager mVP;
+    @Bind(R.id.rb_item_newgood)
+    RadioButton mrb_item_newgood;
+    @Bind(R.id.rb_item_boutique)
+    RadioButton mrb_item_boutique;
+    @Bind(R.id.rb_item_category)
+    RadioButton mrb_item_category;
+    @Bind(R.id.rb_item_cart)
+    RadioButton mrb_item_cart;
+    @Bind(R.id.rb_item_personal)
+    RadioButton mrb_item_personal;
+
+    RadioButton[] mrb;
+    int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         initView();
 
     }
 
 
     private void initView() {
-        fragment_newgoods newgoods = new fragment_newgoods();
-        fragment_boutique boutique = new fragment_boutique();
-        fragment_category category = new fragment_category();
-        fragment_cart cart = new fragment_cart();
-        fragment_personal personal = new fragment_personal();
+        mrb = new RadioButton[5];
+        mrb[0] = mrb_item_newgood;
+        mrb[1] = mrb_item_boutique;
+        mrb[2] = mrb_item_category;
+        mrb[3] = mrb_item_cart;
+        mrb[4] = mrb_item_personal;
+
+
+        Fragment_newgoods newgoods = new Fragment_newgoods();
+        Fragment_boutique boutique = new Fragment_boutique();
+        Fragment_category category = new Fragment_category();
+        Fragment_cart cart = new Fragment_cart();
+        Fragment_personal personal = new Fragment_personal();
         fragmentArrayList.add(newgoods);
         fragmentArrayList.add(boutique);
         fragmentArrayList.add(category);
         fragmentArrayList.add(cart);
         fragmentArrayList.add(personal);
 
-        mVP = (ViewPager) findViewById(R.id.main_fragment);
         fragmentManager = getSupportFragmentManager();
         MyViewPage VP_Adapter = new MyViewPage(fragmentManager, fragmentArrayList);
         mVP.setAdapter(VP_Adapter);
-
-        mrb_item_newgood = (RadioButton) findViewById(R.id.rb_item_newgood);
-        mrb_item_boutique = (RadioButton) findViewById(R.id.rb_item_boutique);
-        mrb_item_category = (RadioButton) findViewById(R.id.rb_item_category);
-        mrb_item_cart = (RadioButton) findViewById(R.id.rb_item_cart);
-        mrb_item_personal = (RadioButton) findViewById(R.id.rb_item_personal);
-
-        //      mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.main_srl);
 
 
     }
@@ -72,33 +84,38 @@ public class MainActivity extends AppCompatActivity {
     public void onCheckedChange(View v) {
         switch (v.getId()) {
             case R.id.rb_item_newgood:
-                Change((RadioButton) v);
-                mVP.setCurrentItem(0);
+                index = 0;
                 break;
             case R.id.rb_item_boutique:
-                Change((RadioButton) v);
-                mVP.setCurrentItem(1);
+                index = 1;
                 break;
             case R.id.rb_item_category:
-                Change((RadioButton) v);
-                mVP.setCurrentItem(2);
+                index = 2;
                 break;
             case R.id.rb_item_cart:
-                Change((RadioButton) v);
-                mVP.setCurrentItem(3);
+                index = 3;
                 break;
             case R.id.rb_item_personal:
-                Change((RadioButton) v);
-                mVP.setCurrentItem(4);
+                index = 4;
                 break;
-
-
         }
+        setRadioButtonStatus();
+        
+    }
 
+    private void setRadioButtonStatus() {
+        for (int i = 0; i < mrb.length; i++) {
+            if (i == index) {
+                mVP.setCurrentItem(i);
+                mrb[i].setChecked(true);
+            } else {
+                mrb[i].setChecked(false);
+            }
+        }
 
     }
 
-    private void Change(RadioButton rb) {
+/*    private void Change(RadioButton rb) {
         if (rb != mrb_item_boutique) {
             mrb_item_boutique.setChecked(false);
         }
@@ -114,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         if (rb != mrb_item_cart) {
             mrb_item_cart.setChecked(false);
         }
-    }
+    }*/
 
     class MyViewPage extends FragmentPagerAdapter {
         ArrayList<Fragment> arrayList;
@@ -132,6 +149,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             return fragmentArrayList.size();
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            getSupportFragmentManager().beginTransaction().hide(fragmentArrayList.get(position));
         }
     }
 }
