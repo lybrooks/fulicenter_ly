@@ -94,8 +94,8 @@ public class Fragment_newgoods extends Fragment {
                             mAdapter.AddContactList(list);
                             break;
                     }
-                }else {
-                        mAdapter.setFooter("没有更多数据了");
+                } else {
+                    mAdapter.setFooter("没有更多数据了");
                 }
             }
 
@@ -129,8 +129,7 @@ public class Fragment_newgoods extends Fragment {
         mAdapter.setMyOnClick(new MyOnClickListener() {
             @Override
             public void OnClick(View view, int position) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("商品信息").create().show();
+                Toast.makeText(getContext(), "点击事件", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -212,7 +211,7 @@ public class Fragment_newgoods extends Fragment {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (MyOnClick == null) {
+                    if (MyOnClick != null) {
                         MyOnClick.OnClick(v, getAdapterPosition());
                     }
                 }
