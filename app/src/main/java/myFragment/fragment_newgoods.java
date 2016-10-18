@@ -20,6 +20,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
+import cn.ucai.fulicenter.myAdapter.newAdapter;
 import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.ConvertUtils;
 import cn.ucai.fulicenter.utils.ImageLoader;
@@ -33,7 +34,7 @@ import day.myfulishe.R;
 public class Fragment_newgoods extends Fragment {
     public GridLayoutManager layoutManger;
     ArrayList<NewGoodsBean> NewGoodsBeanlist;
-    public myDdapter mAdapter;
+    public newAdapter mAdapter;
     public RecyclerView mrv;
 
     int mNewState;
@@ -62,7 +63,7 @@ public class Fragment_newgoods extends Fragment {
         srl = (SwipeRefreshLayout) view.findViewById(R.id.srl);
         mrv = (RecyclerView) view.findViewById(R.id.fag_rlv_newgoods);
         NewGoodsBeanlist = new ArrayList<>();
-        mAdapter = new myDdapter(getContext(), NewGoodsBeanlist);
+        mAdapter = new newAdapter(getContext(), NewGoodsBeanlist);
         layoutManger = new GridLayoutManager(getContext(), I.COLUM_NUM, GridLayoutManager.VERTICAL, false);
         layoutManger.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -119,6 +120,8 @@ public class Fragment_newgoods extends Fragment {
                 srl.setRefreshing(true);
                 tvRefresh.setVisibility(View.VISIBLE);
                 initData(I.ACTION_DOWNLOAD, 1);
+                srl.setRefreshing(false);
+                srl.setEnabled(false);
             }
         });
 
@@ -135,6 +138,8 @@ public class Fragment_newgoods extends Fragment {
                         mAdapter.isMore) {
                     PageId++;
                     initData(I.ACTION_PULL_UP, PageId);
+                    srl.setRefreshing(false);
+                    srl.setEnabled(false);
                 }
             }
 
@@ -146,15 +151,11 @@ public class Fragment_newgoods extends Fragment {
             }
         });
 
-        mAdapter.setMyOnClick(new MyOnClickListener() {
+        mAdapter.setMyOnClick(new newAdapter.MyOnClickListener() {
             @Override
             public void OnClick(View view, int position) {
-                /*Intent intent = new Intent(getContext(), Deails.class);
-                intent.putExtra(I.GoodsDetails.KEY_GOODS_ID, String.valueOf(goodsId));
-                startActivity(intent);*/
                 int goodsId = mAdapter.contactList.get(position).getGoodsId();
                 MFGT.gotoGoodsDtails((Activity) getContext(), goodsId);
-
             }
         });
 
@@ -209,7 +210,7 @@ public class Fragment_newgoods extends Fragment {
     }
 
 
-    class ContactViewHolder extends RecyclerView.ViewHolder {
+/*    class ContactViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.iv_goods_img)
         ImageView Googs_img;
         @Bind(R.id.tv_good_name)
@@ -360,7 +361,7 @@ public class Fragment_newgoods extends Fragment {
 
     public interface MyOnClickListener {
         void OnClick(View view, int position);
-    }
+    }*/
 
 
 }
