@@ -1,9 +1,11 @@
 package cn.ucai.fulicenter.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/10/13.
  */
-public class ColorBean {
+public class ColorBean implements Serializable{
 
 
     /**
@@ -13,12 +15,20 @@ public class ColorBean {
      * colorImg : d
      * colorUrl : https://detail.tmall.com/item.htmspm=a1z10.5b.w40113609973698.66.6
      */
-
+    private int catId;
     private int colorId;
     private String colorName;
     private String colorCode;
     private String colorImg;
     private String colorUrl;
+
+    public int getCatId() {
+        return catId;
+    }
+
+    public void setCatId(int catId) {
+        this.catId = catId;
+    }
 
     public int getColorId() {
         return colorId;

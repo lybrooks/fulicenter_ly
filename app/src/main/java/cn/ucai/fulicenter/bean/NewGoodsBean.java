@@ -1,10 +1,8 @@
 package cn.ucai.fulicenter.bean;
 
-/**
- * Created by Administrator on 2016/10/13.
- */
-public class NewGoodsBean {
+import java.io.Serializable;
 
+public class NewGoodsBean implements Serializable {
 
     /**
      * id : 1
@@ -27,7 +25,6 @@ public class NewGoodsBean {
      * addTime : 1442389445
      * promote : false
      */
-
     private int id;
     private int goodsId;
     private int catId;
@@ -72,20 +69,20 @@ public class NewGoodsBean {
         this.catId = catId;
     }
 
-    public String getGoodsName() {
-        return goodsName;
-    }
-
-    public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName;
-    }
-
     public String getGoodsEnglishName() {
         return goodsEnglishName;
     }
 
     public void setGoodsEnglishName(String goodsEnglishName) {
         this.goodsEnglishName = goodsEnglishName;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
     }
 
     public String getGoodsBrief() {
@@ -128,12 +125,12 @@ public class NewGoodsBean {
         this.rankPrice = rankPrice;
     }
 
-    public boolean isIsPromote() {
+    public boolean isPromote() {
         return isPromote;
     }
 
-    public void setIsPromote(boolean isPromote) {
-        this.isPromote = isPromote;
+    public void setPromote(boolean promote) {
+        isPromote = promote;
     }
 
     public String getGoodsThumb() {
@@ -188,19 +185,8 @@ public class NewGoodsBean {
         return addTime;
     }
 
-    public void setAddTime(int addTime) {
+    public void setAddTime(long addTime) {
         this.addTime = addTime;
-    }
-
-    public boolean isPromote() {
-        return promote;
-    }
-
-    public void setPromote(boolean promote) {
-        this.promote = promote;
-    }
-
-    public NewGoodsBean() {
     }
 
     @Override

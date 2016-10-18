@@ -1,10 +1,11 @@
 package cn.ucai.fulicenter.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/10/13.
  */
-public class CartBean {
-
+public class CartBean implements Serializable {
 
     /**
      * id : 35
@@ -19,10 +20,13 @@ public class CartBean {
     private int id;
     private String userName;
     private int goodsId;
-    private Object goods;
+    private GoodsDetailsBean goods;
     private int count;
     private boolean isChecked;
     private boolean checked;
+
+    public CartBean() {
+    }
 
     public int getId() {
         return id;
@@ -48,11 +52,11 @@ public class CartBean {
         this.goodsId = goodsId;
     }
 
-    public Object getGoods() {
+    public GoodsDetailsBean getGoods() {
         return goods;
     }
 
-    public void setGoods(Object goods) {
+    public void setGoods(GoodsDetailsBean goods) {
         this.goods = goods;
     }
 
@@ -64,23 +68,12 @@ public class CartBean {
         this.count = count;
     }
 
-    public boolean isIsChecked() {
+    public boolean isChecked() {
         return isChecked;
     }
 
-    public void setIsChecked(boolean isChecked) {
-        this.isChecked = isChecked;
-    }
-
-    public boolean isChecked() {
-        return checked;
-    }
-
     public void setChecked(boolean checked) {
-        this.checked = checked;
-    }
-
-    public CartBean() {
+        isChecked = checked;
     }
 
     @Override
@@ -89,7 +82,6 @@ public class CartBean {
                 "id=" + id +
                 ", userName='" + userName + '\'' +
                 ", goodsId=" + goodsId +
-                ", goods=" + goods +
                 ", count=" + count +
                 ", isChecked=" + isChecked +
                 ", checked=" + checked +
