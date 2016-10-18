@@ -3,9 +3,7 @@ package myFragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.renderscript.Sampler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -28,7 +26,6 @@ import cn.ucai.fulicenter.utils.ImageLoader;
 import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import day.myfulishe.R;
-import day.myfulishe.activity.Deails;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,7 +42,6 @@ public class Fragment_newgoods extends Fragment {
     SwipeRefreshLayout srl;
     @Bind(R.id.tv_refresh)
     TextView tvRefresh;
-
 
     public Fragment_newgoods() {
     }
@@ -157,7 +153,7 @@ public class Fragment_newgoods extends Fragment {
                 intent.putExtra(I.GoodsDetails.KEY_GOODS_ID, String.valueOf(goodsId));
                 startActivity(intent);*/
                 int goodsId = mAdapter.contactList.get(position).getGoodsId();
-                MFGT.gotoGoodsDtails((Activity) getContext(),goodsId);
+                MFGT.gotoGoodsDtails((Activity) getContext(), goodsId);
 
             }
         });

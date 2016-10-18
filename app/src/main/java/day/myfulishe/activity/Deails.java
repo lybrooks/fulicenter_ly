@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import butterknife.Bind;
@@ -23,8 +22,6 @@ import day.myfulishe.R;
 
 public class Deails extends AppCompatActivity {
 
-    @Bind(R.id.iv_back)
-    ImageView ivBack;
     @Bind(R.id.iv_main_cart)
     ImageView ivMainCart;
     @Bind(R.id.iv_collect)
@@ -44,9 +41,12 @@ public class Deails extends AppCompatActivity {
     @Bind(R.id.tv_goods_dsc)
     WebView tvGoodsDsc;
 
+
     int goodId;
-
-
+    @Bind(R.id.iv_back)
+    ImageView ivBack;
+    @Bind(R.id.LL)
+    RelativeLayout LL;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,19 +82,24 @@ public class Deails extends AppCompatActivity {
         tvGoodDeailsName.setText(details.getGoodsName());
         tvGoodPrize.setText(details.getCurrencyPrice());
         SALVGoodsDials.startPlayLoop(FID, getAlbumImgUrl(details), getCount(details));
-        tvGoodsDsc.loadDataWithBaseURL(null,details.getGoodsBrief(),I.TEXT_HTML,I.UTF_8,null);
+        tvGoodsDsc.loadDataWithBaseURL(null, details.getGoodsBrief(), I.TEXT_HTML, I.UTF_8, null);
     }
 
     private int getCount(GoodsDetailsBean details) {
-        return details.getProperties()[0].getAlbums().length;
+        if (details.getProperties() != null && details.getProperties().length > 0) {
+            return details.getProperties()[0].getAlbums().length;
+        }
+        return 0;
     }
 
     private String[] getAlbumImgUrl(GoodsDetailsBean details) {
         String[] url = new String[]{};
-        AlbumsBean[] albumsBeen = details.getProperties()[0].getAlbums();
-        url = new String[albumsBeen.length];
-        for (int i = 0; i < albumsBeen.length; i++) {
-            url[i] = albumsBeen[i].getImgUrl();
+        if (details.getProperties() != null && details.getProperties().length > 0) {
+            AlbumsBean[] albumsBeen = details.getProperties()[0].getAlbums();
+            url = new String[albumsBeen.length];
+            for (int i = 0; i < albumsBeen.length; i++) {
+                url[i] = albumsBeen[i].getImgUrl();
+            }
         }
         return url;
     }
@@ -102,5 +107,6 @@ public class Deails extends AppCompatActivity {
 
     @OnClick(R.id.iv_back)
     public void onClick() {
+        this.finish();
     }
 }
