@@ -1,6 +1,7 @@
 package myFragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -21,8 +23,10 @@ import cn.ucai.fulicenter.bean.BoutiqueBean;
 import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.ConvertUtils;
 import cn.ucai.fulicenter.utils.ImageLoader;
+import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import day.myfulishe.R;
+import day.myfulishe.activity.Boutique;
 
 
 public class Fragment_boutique extends Fragment {
@@ -53,16 +57,30 @@ public class Fragment_boutique extends Fragment {
         layoutManger = new LinearLayoutManager(getContext());
         fagRlvNewgoods.setLayoutManager(layoutManger);
         fagRlvNewgoods.setAdapter(mAdapter);
-
-
         initData();
+        setListener();
         return view;
+    }
+
+    private void setListener() {
+        mAdapter.setMyOnClick(new MyOnClickListener() {
+            @Override
+            public void OnClick(View view, int position) {
+                String title = mAdapter.contactList.get(position).getTitle();
+                Intent intent = new Intent(getContext(), Boutique.class);
+                intent.putExtra("title", title);
+                startActivity(intent);
+
+            }
+        });
+
     }
 
     private void initData() {
         NetDao.downloadBoutique(getContext(), new OkHttpUtils.OnCompleteListener<BoutiqueBean[]>() {
                     @Override
                     public void onSuccess(BoutiqueBean[] result) {
+                        tvRefresh.setVisibility(View.GONE);
                         if (result != null && result.length > 0 && mAdapter.isMore) {
                             ArrayList<BoutiqueBean> list = ConvertUtils.array2List(result);
                             mAdapter.inintContact(list);
@@ -217,8 +235,8 @@ public class Fragment_boutique extends Fragment {
             contactViewHolder.tvGoodsTitile.setText(goodsBean.getTitle());
             contactViewHolder.tvGoodsDsc.setText(goodsBean.getDescription());
             ImageLoader.build(I.DOWNLOAD_IMG_URL + goodsBean.getImageurl())
-                    .height(500)
-                    .width(400)
+                    .height(250)
+                    .width(300)
                     .imageView(contactViewHolder.ivBouti)
                     .listener(parent)
                     .showImage(context);
