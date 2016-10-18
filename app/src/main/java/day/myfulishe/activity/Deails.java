@@ -18,10 +18,6 @@ public class Deails extends AppCompatActivity {
     TextView tvGoodDeailsName;
     @Bind(R.id.tv_good_Color)
     TextView tvGoodColor;
-    @Bind(R.id.iv_goods_deails)
-    ImageView ivGoodsDeails;
-    @Bind(R.id.tv_goods_dsc)
-    TextView tvGoodsDsc;
     @Bind(R.id.tv_good_prize)
     TextView tvGoodPrize;
 

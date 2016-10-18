@@ -2,11 +2,10 @@ package myFragment;
 
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -25,7 +23,6 @@ import cn.ucai.fulicenter.bean.NewGoodsBean;
 import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.ConvertUtils;
 import cn.ucai.fulicenter.utils.ImageLoader;
-import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import day.myfulishe.R;
 import day.myfulishe.activity.Deails;
@@ -34,8 +31,6 @@ import day.myfulishe.activity.Deails;
  * A simple {@link Fragment} subclass.
  */
 public class Fragment_newgoods extends Fragment {
-
-
     public GridLayoutManager layoutManger;
     ArrayList<NewGoodsBean> NewGoodsBeanlist;
     public myDdapter mAdapter;
@@ -43,6 +38,10 @@ public class Fragment_newgoods extends Fragment {
 
     int mNewState;
     int PageId = 1;
+    @Bind(R.id.srl)
+    SwipeRefreshLayout srl;
+    @Bind(R.id.tv_refresh)
+    TextView tvRefresh;
 
 
     public Fragment_newgoods() {
@@ -54,13 +53,14 @@ public class Fragment_newgoods extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_newgoods, container, false);
         initView(view);
-        ButterKnife.bind(this, view);
         initData(I.ACTION_DOWNLOAD, PageId);
         setListener();
+        ButterKnife.bind(this, view);
         return view;
     }
 
     private void initView(View view) {
+        srl = (SwipeRefreshLayout) view.findViewById(R.id.srl);
         mrv = (RecyclerView) view.findViewById(R.id.fag_rlv_newgoods);
         NewGoodsBeanlist = new ArrayList<>();
         mAdapter = new myDdapter(getContext(), NewGoodsBeanlist);
@@ -80,6 +80,8 @@ public class Fragment_newgoods extends Fragment {
         NetDao.downloadNewGoods(getContext(), PageId, new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
+                srl.setRefreshing(false);
+                tvRefresh.setVisibility(View.GONE);
                 if (result != null && result.length > 0 && mAdapter.isMore) {
                     ArrayList<NewGoodsBean> list = ConvertUtils.array2List(result);
                     switch (action) {
@@ -92,8 +94,10 @@ public class Fragment_newgoods extends Fragment {
                             break;
                         case I.ACTION_PULL_UP:
                             mAdapter.AddContactList(list);
+
                             break;
                     }
+
                 } else {
                     mAdapter.setFooter("没有更多数据了");
                 }
@@ -101,13 +105,24 @@ public class Fragment_newgoods extends Fragment {
 
             @Override
             public void onError(String error) {
-
+                srl.setRefreshing(false);
+                srl.setEnabled(false);
             }
         });
     }
 
 
     private void setListener() {
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                srl.setEnabled(true);
+                srl.setRefreshing(true);
+                tvRefresh.setVisibility(View.VISIBLE);
+                initData(I.ACTION_DOWNLOAD, 1);
+            }
+        });
+
         mrv.setOnScrollListener(new RecyclerView.OnScrollListener() {
             int Lastposition;
 
@@ -116,31 +131,37 @@ public class Fragment_newgoods extends Fragment {
                 super.onScrollStateChanged(recyclerView, newState);
                 mNewState = newState;
                 Lastposition = layoutManger.findLastVisibleItemPosition();
-                if (Lastposition >= mAdapter.getItemCount() - 1 && newState == RecyclerView.SCROLL_STATE_IDLE &&
+                if (Lastposition >= mAdapter.getItemCount() - 1
+                        && newState == RecyclerView.SCROLL_STATE_IDLE &&
                         mAdapter.isMore) {
                     PageId++;
                     initData(I.ACTION_PULL_UP, PageId);
                 }
             }
 
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int firstposition = layoutManger.findFirstVisibleItemPosition();
+                srl.setEnabled(firstposition == 0);
+            }
         });
 
         mAdapter.setMyOnClick(new MyOnClickListener() {
             @Override
             public void OnClick(View view, int position) {
-                Intent intent  = new Intent(getContext(), Deails.class);
+                Intent intent = new Intent(getContext(), Deails.class);
                 String currencyPrice = mAdapter.contactList.get(position).getCurrencyPrice();
                 String goodsEnglishName = mAdapter.contactList.get(position).getGoodsEnglishName();
                 String goodsName = mAdapter.contactList.get(position).getGoodsName();
                 String colorName = mAdapter.contactList.get(position).getColorName();
                 String goodsThumb = mAdapter.contactList.get(position).getGoodsThumb();
-                intent.putExtra("Price",currencyPrice);
-                intent.putExtra("EnglishName",goodsEnglishName);
-                intent.putExtra("goodName",goodsName);
-                intent.putExtra("colorName",colorName);
-                intent.putExtra("goodsThumb",goodsThumb);
+                intent.putExtra("Price", currencyPrice);
+                intent.putExtra("EnglishName", goodsEnglishName);
+                intent.putExtra("goodName", goodsName);
+                intent.putExtra("colorName", colorName);
+                intent.putExtra("goodsThumb", goodsThumb);
                 startActivity(intent);
-
 
 
             }
@@ -196,17 +217,6 @@ public class Fragment_newgoods extends Fragment {
         ButterKnife.unbind(this);
     }
 
-/*    class ContactViewHolder extends RecyclerView.ViewHolder {
-        ImageView Googs_img;
-        TextView Goods_name, Goods_prize;
-
-        public ContactViewHolder(View itemView) {
-            super(itemView);
-            Googs_img = (ImageView) itemView.findViewById(R.id.iv_goods_img);
-            Goods_name = (TextView) itemView.findViewById(R.id.tv_good_name);
-            Goods_prize = (TextView) itemView.findViewById(R.id.tv_good_prize);
-        }
-    }*/
 
     class ContactViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.iv_goods_img)
@@ -232,14 +242,6 @@ public class Fragment_newgoods extends Fragment {
         }
     }
 
-    /*   class FooterViewHolder extends RecyclerView.ViewHolder {
-           TextView mtvFooter;
-
-           public FooterViewHolder(View itemView) {
-               super(itemView);
-               mtvFooter = (TextView) itemView.findViewById(R.id.tv_item_footer);
-           }
-       }*/
     class FooterViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.tv_item_footer)
         TextView mtvFooter;
@@ -296,6 +298,8 @@ public class Fragment_newgoods extends Fragment {
         public void inintContact(ArrayList<NewGoodsBean> list) {
             this.contactList.clear();
             this.contactList.addAll(list);
+            srl.setRefreshing(false);
+            srl.setEnabled(false);
             notifyDataSetChanged();
         }
 
