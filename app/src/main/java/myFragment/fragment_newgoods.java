@@ -1,9 +1,11 @@
 package myFragment;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.renderscript.Sampler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -23,6 +25,7 @@ import cn.ucai.fulicenter.bean.NewGoodsBean;
 import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.ConvertUtils;
 import cn.ucai.fulicenter.utils.ImageLoader;
+import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import day.myfulishe.R;
 import day.myfulishe.activity.Deails;
@@ -150,19 +153,11 @@ public class Fragment_newgoods extends Fragment {
         mAdapter.setMyOnClick(new MyOnClickListener() {
             @Override
             public void OnClick(View view, int position) {
-                Intent intent = new Intent(getContext(), Deails.class);
-                String currencyPrice = mAdapter.contactList.get(position).getCurrencyPrice();
-                String goodsEnglishName = mAdapter.contactList.get(position).getGoodsEnglishName();
-                String goodsName = mAdapter.contactList.get(position).getGoodsName();
-                String colorName = mAdapter.contactList.get(position).getColorName();
-                String goodsThumb = mAdapter.contactList.get(position).getGoodsThumb();
-                intent.putExtra("Price", currencyPrice);
-                intent.putExtra("EnglishName", goodsEnglishName);
-                intent.putExtra("goodName", goodsName);
-                intent.putExtra("colorName", colorName);
-                intent.putExtra("goodsThumb", goodsThumb);
-                startActivity(intent);
-
+                /*Intent intent = new Intent(getContext(), Deails.class);
+                intent.putExtra(I.GoodsDetails.KEY_GOODS_ID, String.valueOf(goodsId));
+                startActivity(intent);*/
+                int goodsId = mAdapter.contactList.get(position).getGoodsId();
+                MFGT.gotoGoodsDtails((Activity) getContext(),goodsId);
 
             }
         });

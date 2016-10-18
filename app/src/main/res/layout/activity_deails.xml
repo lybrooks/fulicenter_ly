@@ -57,20 +57,19 @@
         android:id="@+id/LL"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/LL_title"
+        android:layout_above="@+id/SALV_goods_dials"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/SALV_goods_dials">
+        android:layout_below="@+id/LL_title">
 
         <TextView
             android:id="@+id/tv_good_EnglishName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="英文名"
-            android:textSize="18dp"
             android:layout_alignBottom="@+id/tv_good_prize"
             android:layout_marginLeft="60dp"
-            />
+            android:text="英文名"
+            android:textSize="18dp" />
 
         <TextView
             android:id="@+id/tv_good_deails_name"
@@ -82,57 +81,46 @@
             android:textSize="18dp" />
 
         <TextView
-            android:id="@+id/tv_good_Color"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_good_EnglishName"
-            android:layout_toRightOf="@+id/tv_good_deails_name"
-            android:layout_marginLeft="20sp"
-            android:text="商品颜色"
-            android:textSize="18dp" />
-
-
-        <TextView
             android:id="@+id/tv_good_prize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="价格"
-            android:textColor="#e40f0f"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_marginRight="80sp"
-            />
+            android:text="价格"
+            android:textColor="#e40f0f" />
     </RelativeLayout>
 
     <cn.ucai.fulicenter.views.SlideAutoLoopView
+        android:id="@+id/SALV_goods_dials"
         android:layout_width="250dp"
         android:layout_height="300dp"
-        android:id="@+id/SALV_goods_dials"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true">
+        android:background="@color/good_detail_bg_white"
+        >
 
     </cn.ucai.fulicenter.views.SlideAutoLoopView>
 
     <cn.ucai.fulicenter.views.FlowIndicator
         android:id="@+id/FID"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/SALV_goods_dials"
         android:layout_centerHorizontal="true"
         app:count="4"
         app:focus="0"
-        app:focus_color="#fff"
-        app:normal_color="#e9cf0f"
+        app:focus_color="@color/good_detaul_flow_indicator_focus"
+        app:normal_color="#ffff"
         app:r="8dp"
         app:space="8dp" />
 
-    <ScrollView
+    <WebView
         android:id="@+id/tv_goods_dsc"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/FID"
-        android:layout_centerHorizontal="true"
-        />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
