@@ -16,8 +16,14 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.ucai.fulicenter.bean.CategoryChildBean;
 import cn.ucai.fulicenter.bean.CategoryGroupBean;
 import cn.ucai.fulicenter.myAdapter.CategoryAdapter;
+import cn.ucai.fulicenter.net.NetDao;
+import cn.ucai.fulicenter.utils.CommonUtils;
+import cn.ucai.fulicenter.utils.ConvertUtils;
+import cn.ucai.fulicenter.utils.L;
+import cn.ucai.fulicenter.utils.OkHttpUtils;
 import day.myfulishe.R;
 
 public class Fragment_category extends Fragment {
@@ -31,8 +37,9 @@ public class Fragment_category extends Fragment {
     SwipeRefreshLayout srl;
 
     CategoryAdapter categoryAdapter;
-    ArrayList<CategoryGroupBean> categoryList;
-    public LinearLayoutManager layoutManger;
+    ArrayList<CategoryGroupBean> groupList;
+    ArrayList<ArrayList<CategoryChildBean>> chillist;
+
     public Fragment_category() {
 
     }
@@ -42,9 +49,28 @@ public class Fragment_category extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category, container, false);
         ButterKnife.bind(this, view);
-        categoryList = new ArrayList<>();
-
+        groupList = new ArrayList<>();
+        chillist = new ArrayList<>();
+        categoryAdapter = new CategoryAdapter(getContext(), groupList, chillist);
+        ELV.setAdapter(categoryAdapter);
+        initData();
         return view;
+
+    }
+
+    private void initData() {
+        NetDao.downloadCategoryGroup(getContext(), new OkHttpUtils.OnCompleteListener<CategoryGroupBean[]>() {
+            @Override
+            public void onSuccess(CategoryGroupBean[] result) {
+                ArrayList<CategoryGroupBean> categorylist = ConvertUtils.array2List(result);
+                categoryAdapter.addlist(categorylist);
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
 
     }
 

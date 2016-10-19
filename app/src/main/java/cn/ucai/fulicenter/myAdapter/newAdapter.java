@@ -97,7 +97,6 @@ import day.myfulishe.R;
                 layout = inflater.inflate(R.layout.item_contact, parent, false);
                 holder = new ContactViewHolder(layout, myOnClick);
                 break;
-
         }
         return holder;
     }
@@ -163,7 +162,6 @@ import day.myfulishe.R;
     class FooterViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.tv_item_footer)
         TextView mtvFooter;
-
         FooterViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);

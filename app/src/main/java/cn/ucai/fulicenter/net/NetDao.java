@@ -4,6 +4,7 @@ import android.content.Context;
 
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.bean.BoutiqueBean;
+import cn.ucai.fulicenter.bean.CategoryGroupBean;
 import cn.ucai.fulicenter.bean.GoodsDetailsBean;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
@@ -59,5 +60,12 @@ public class NetDao {
                 .execute(listener);
 
     }
+    /** 下载分类首页大类的数据*/
+    public static void downloadCategoryGroup(Context context , OkHttpUtils.OnCompleteListener<CategoryGroupBean[]> listener) {
+        OkHttpUtils utils = new OkHttpUtils(context);
+        utils.setRequestUrl(I.REQUEST_FIND_CATEGORY_GROUP)
+                .targetClass(CategoryGroupBean[].class)
+                .execute(listener);
 
+    }
 }

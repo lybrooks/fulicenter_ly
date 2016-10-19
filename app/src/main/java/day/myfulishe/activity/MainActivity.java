@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initView();
         initFragment();
-
     }
 
     private void initFragment() {
@@ -137,23 +136,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-/*    private void Change(RadioButton rb) {
-        if (rb != mrb_item_boutique) {
-            mrb_item_boutique.setChecked(false);
-        }
-        if (rb != mrb_item_category) {
-            mrb_item_category.setChecked(false);
-        }
-        if (rb != mrb_item_newgood) {
-            mrb_item_newgood.setChecked(false);
-        }
-        if (rb != mrb_item_personal) {
-            mrb_item_personal.setChecked(false);
-        }
-        if (rb != mrb_item_cart) {
-            mrb_item_cart.setChecked(false);
-        }
-    }*/
 
     class MyViewPage extends FragmentPagerAdapter {
         ArrayList<Fragment> arrayList;
