@@ -1,6 +1,5 @@
 package day.myfulishe.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -42,6 +41,7 @@ public class Boutique extends AppCompatActivity {
     public GridLayoutManager layoutManger;
     ArrayList<NewGoodsBean> NewGoodsBeanlist;
     int CartId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +60,7 @@ public class Boutique extends AppCompatActivity {
                 srl.setEnabled(true);
                 srl.setRefreshing(true);
                 tvRefresh.setVisibility(View.VISIBLE);
-                initData(I.ACTION_DOWNLOAD, 1,PageId);
+                initData(I.ACTION_DOWNLOAD, 1, PageId);
                 srl.setRefreshing(false);
                 srl.setEnabled(false);
             }
@@ -78,7 +78,7 @@ public class Boutique extends AppCompatActivity {
                         && newState == RecyclerView.SCROLL_STATE_IDLE &&
                         mAdapter.isMore) {
                     PageId++;
-                    initData(I.ACTION_PULL_UP,CartId,PageId);
+                    initData(I.ACTION_PULL_UP, CartId, PageId);
                     srl.setRefreshing(false);
                     srl.setEnabled(false);
                 }
@@ -154,5 +154,10 @@ public class Boutique extends AppCompatActivity {
 
             }
         });
+    }
+
+    @OnClick(R.id.back_nomal)
+    public void onClick() {
+        this.finish();
     }
 }

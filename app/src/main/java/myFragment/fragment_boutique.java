@@ -69,9 +69,19 @@ public class Fragment_boutique extends Fragment {
                 int bouttique_id = mAdapter.contactList.get(position).getId();
                 Intent intent = new Intent(getContext(), Boutique.class);
                 intent.putExtra("title", title);
-                intent.putExtra("cartId",bouttique_id);
+                intent.putExtra("cartId", bouttique_id);
                 startActivity(intent);
 
+            }
+        });
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                srl.setColorSchemeColors(getResources().getColor(R.color.red));
+                srl.setRefreshing(true);
+                srl.setEnabled(true);
+                tvRefresh.setVisibility(View.VISIBLE);
+                initData();
             }
         });
 
@@ -81,16 +91,18 @@ public class Fragment_boutique extends Fragment {
         NetDao.downloadBoutique(getContext(), new OkHttpUtils.OnCompleteListener<BoutiqueBean[]>() {
                     @Override
                     public void onSuccess(BoutiqueBean[] result) {
-                        tvRefresh.setVisibility(View.GONE);
                         if (result != null && result.length > 0 && mAdapter.isMore) {
                             ArrayList<BoutiqueBean> list = ConvertUtils.array2List(result);
                             mAdapter.inintContact(list);
+                            tvRefresh.setVisibility(View.GONE);
+                            srl.setRefreshing(false);
                         }
                     }
 
                     @Override
                     public void onError(String error) {
-
+                        srl.setRefreshing(false);
+                        srl.setEnabled(false);
                     }
                 }
         );
@@ -142,8 +154,6 @@ public class Fragment_boutique extends Fragment {
     }
 
     class myDdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-
         public myDdapter(Context context, ArrayList<BoutiqueBean> contactList) {
             this.context = context;
             this.contactList = contactList;
@@ -188,8 +198,6 @@ public class Fragment_boutique extends Fragment {
         public void inintContact(ArrayList<BoutiqueBean> list) {
             this.contactList.clear();
             this.contactList.addAll(list);
-            srl.setRefreshing(false);
-            srl.setEnabled(false);
             notifyDataSetChanged();
         }
 
@@ -218,7 +226,6 @@ public class Fragment_boutique extends Fragment {
                     layout = inflater.inflate(R.layout.boutique, parent, false);
                     holder = new ContactViewHolder(layout, myOnClick);
                     break;
-
             }
             return holder;
         }

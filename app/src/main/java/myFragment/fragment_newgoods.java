@@ -23,7 +23,6 @@ import cn.ucai.fulicenter.bean.NewGoodsBean;
 import cn.ucai.fulicenter.myAdapter.newAdapter;
 import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.ConvertUtils;
-import cn.ucai.fulicenter.utils.ImageLoader;
 import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import day.myfulishe.R;
@@ -120,8 +119,6 @@ public class Fragment_newgoods extends Fragment {
                 srl.setRefreshing(true);
                 tvRefresh.setVisibility(View.VISIBLE);
                 initData(I.ACTION_DOWNLOAD, 1);
-                srl.setRefreshing(false);
-                srl.setEnabled(false);
             }
         });
 
@@ -138,8 +135,6 @@ public class Fragment_newgoods extends Fragment {
                         mAdapter.isMore) {
                     PageId++;
                     initData(I.ACTION_PULL_UP, PageId);
-                    srl.setRefreshing(false);
-                    srl.setEnabled(false);
                 }
             }
 
