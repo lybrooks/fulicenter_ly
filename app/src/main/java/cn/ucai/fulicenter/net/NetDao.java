@@ -4,6 +4,7 @@ import android.content.Context;
 
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.bean.BoutiqueBean;
+import cn.ucai.fulicenter.bean.CategoryChildBean;
 import cn.ucai.fulicenter.bean.CategoryGroupBean;
 import cn.ucai.fulicenter.bean.GoodsDetailsBean;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
@@ -60,12 +61,28 @@ public class NetDao {
                 .execute(listener);
 
     }
-    /** 下载分类首页大类的数据*/
-    public static void downloadCategoryGroup(Context context , OkHttpUtils.OnCompleteListener<CategoryGroupBean[]> listener) {
+
+    /**
+     * 下载分类首页大类的数据
+     */
+    public static void downloadCategoryGroup(Context context, OkHttpUtils.OnCompleteListener<CategoryGroupBean[]> listener) {
         OkHttpUtils utils = new OkHttpUtils(context);
         utils.setRequestUrl(I.REQUEST_FIND_CATEGORY_GROUP)
                 .targetClass(CategoryGroupBean[].class)
                 .execute(listener);
 
+    }
+
+    /**
+     * 下载分类首页二级页面数据
+     */
+    public static void downloadCategoryChild(Context context, int parent_id, OkHttpUtils.OnCompleteListener<CategoryChildBean[]> listener) {
+        OkHttpUtils utils = new OkHttpUtils(context);
+        utils.setRequestUrl(I.REQUEST_FIND_CATEGORY_CHILDREN)
+                .addParam(I.CategoryChild.PARENT_ID, parent_id + "")
+                .addParam(I.PAGE_ID, I.PAGE_ID_DEFAULT + "")
+                .addParam(I.PAGE_SIZE, I.PAGE_SIZE_DEFAULT + "")
+                .targetClass(CategoryChildBean[].class)
+                .execute(listener);
     }
 }

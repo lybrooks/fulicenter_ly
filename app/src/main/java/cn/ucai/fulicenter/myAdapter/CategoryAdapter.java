@@ -142,4 +142,8 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
     }
 
 
+    public void addchildlist(ArrayList<CategoryChildBean> categorylist) {
+        this.childs.add(categorylist);
+        notifyDataSetChanged();
+    }
 }

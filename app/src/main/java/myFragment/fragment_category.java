@@ -64,8 +64,21 @@ public class Fragment_category extends Fragment {
             public void onSuccess(CategoryGroupBean[] result) {
                 ArrayList<CategoryGroupBean> categorylist = ConvertUtils.array2List(result);
                 categoryAdapter.addlist(categorylist);
-            }
+                for(CategoryGroupBean group:result){
+                    NetDao.downloadCategoryChild(getContext(), group.getId(), new OkHttpUtils.OnCompleteListener<CategoryChildBean[]>() {
+                        @Override
+                        public void onSuccess(CategoryChildBean[] result) {
+                            ArrayList<CategoryChildBean> categorylist = ConvertUtils.array2List(result);
+                            categoryAdapter.addchildlist(categorylist);
+                        }
 
+                        @Override
+                        public void onError(String error) {
+
+                        }
+                    });
+                }
+            }
             @Override
             public void onError(String error) {
 
