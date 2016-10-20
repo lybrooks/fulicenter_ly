@@ -1,5 +1,6 @@
 package myFragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import cn.ucai.fulicenter.bean.BoutiqueBean;
 import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.ConvertUtils;
 import cn.ucai.fulicenter.utils.ImageLoader;
+import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import day.myfulishe.R;
 import day.myfulishe.activity.Boutique;
@@ -67,10 +69,7 @@ public class Fragment_boutique extends Fragment {
             public void OnClick(View view, int position) {
                 String title = mAdapter.contactList.get(position).getTitle();
                 int bouttique_id = mAdapter.contactList.get(position).getId();
-                Intent intent = new Intent(getContext(), Boutique.class);
-                intent.putExtra("title", title);
-                intent.putExtra("cartId", bouttique_id);
-                startActivity(intent);
+                MFGT.gotoBoutique((Activity) getContext(),title,bouttique_id);
 
             }
         });

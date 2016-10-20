@@ -17,7 +17,7 @@
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/back" />
+            android:src="@mipmap/back_nomal" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
             android:id="@+id/iv_main_cart"
             style="@style/menu_item_style_cart"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="150sp"
+            android:layout_marginLeft="170sp"
             android:src="@mipmap/bg_cart_selected" />
 
         <ImageView
@@ -103,9 +103,10 @@
 
     </cn.ucai.fulicenter.views.SlideAutoLoopView>
 
+
     <cn.ucai.fulicenter.views.FlowIndicator
         android:id="@+id/FID"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/SALV_goods_dials"
         android:layout_centerHorizontal="true"
@@ -114,7 +115,8 @@
         app:focus_color="@color/good_detaul_flow_indicator_focus"
         app:normal_color="#ffff"
         app:r="8dp"
-        app:space="8dp" />
+        app:space="8dp"
+        />
 
     <WebView
         android:id="@+id/tv_goods_dsc"

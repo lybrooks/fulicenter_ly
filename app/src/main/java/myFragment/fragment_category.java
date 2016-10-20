@@ -49,7 +49,6 @@ public class Fragment_category extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category, container, false);
         ButterKnife.bind(this, view);
-      // ExpandableListView ELV = (ExpandableListView) view.findViewById(R.id.ELV);
         initData();
         groupList = new ArrayList<>();
         chillist = new ArrayList<>();
@@ -78,20 +77,6 @@ public class Fragment_category extends Fragment {
                 categoryAdapter.addlist(categorylist);
                 srl.setRefreshing(false);
                 srl.setEnabled(false);
-       /*         for (CategoryGroupBean group : result) {
-                    NetDao.downloadCategoryChild(getContext(), group.getId(), new OkHttpUtils.OnCompleteListener<CategoryChildBean[]>() {
-                        @Override
-                        public void onSuccess(CategoryChildBean[] result) {
-                            ArrayList<CategoryChildBean> categorylist = ConvertUtils.array2List(result);
-                            categoryAdapter.addchildlist(categorylist);
-                        }
-
-                        @Override
-                        public void onError(String error) {
-
-                        }
-                    });
-                }*/
             }
 
             @Override

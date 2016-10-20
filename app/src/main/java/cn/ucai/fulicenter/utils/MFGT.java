@@ -3,8 +3,12 @@ package cn.ucai.fulicenter.utils;
 import android.app.Activity;
 import android.content.Intent;
 
+import java.util.ArrayList;
+
 import cn.ucai.fulicenter.I;
+import cn.ucai.fulicenter.bean.CategoryChildBean;
 import day.myfulishe.activity.Boutique;
+import day.myfulishe.activity.CategoryDetails;
 import day.myfulishe.activity.Deails;
 import day.myfulishe.activity.MainActivity;
 import day.myfulishe.R;
@@ -36,6 +40,21 @@ public class MFGT {
     public static void startActivity(Activity context, Intent intent) {
         context.startActivity(intent);
         context.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+    }
+
+    public static void gotoCategoryDtails(Activity context,int id,ArrayList<CategoryChildBean> list,String name){
+        Intent intent = new Intent(context,CategoryDetails.class);
+        intent.putExtra(I.CategoryChild.CAT_ID,id);
+        intent.putExtra("childList",list);
+        intent.putExtra(I.CategoryGroup.NAME,name);
+        startActivity(context,intent);
+    }
+    public static void gotoBoutique(Activity context,String Title,int cariId){
+        Intent intent = new Intent(context, Boutique.class);
+        intent.putExtra("title", Title);
+        intent.putExtra("cartId", cariId);
+        startActivity(context,intent);
+
     }
 
 

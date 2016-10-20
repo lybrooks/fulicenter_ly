@@ -185,10 +185,9 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(),CategoryDetails.class);
-                intent.putExtra("cart_id",childs.get(groupPosition).get(childPosition).getId());
-                intent.putExtra("title",childs.get(groupPosition).get(childPosition).getName());
-                getContext().startActivity(intent);
+
+                ArrayList<CategoryChildBean> list = childs.get(groupPosition);
+                MFGT.gotoCategoryDtails((Activity) getContext(),childs.get(groupPosition).get(childPosition).getId(),list,childs.get(groupPosition).get(childPosition).getName());
             }
         });
 
