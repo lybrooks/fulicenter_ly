@@ -1,5 +1,6 @@
 package day.myfulishe.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
 import cn.ucai.fulicenter.myAdapter.newAdapter;
@@ -31,12 +33,6 @@ public class CategoryDetails extends AppCompatActivity {
     ImageView ivBack;
     @Bind(R.id.tv_Title)
     TextView tvTitle;
-    @Bind(R.id.iv_arrowup)
-    ImageView ivArrowup;
-    @Bind(R.id.bt_SortPrice)
-    Button btSortPrice;
-    @Bind(R.id.bt_SortTime)
-    Button btSortTime;
     @Bind(R.id.tv_refresh)
     TextView tvRefresh;
     @Bind(R.id.fag_rlv_newgoods)
@@ -51,6 +47,12 @@ public class CategoryDetails extends AppCompatActivity {
     public GridLayoutManager layoutManger;
     ArrayList<NewGoodsBean> NewGoodsBeanlist;
     int CartId;
+    @Bind(R.id.bt_SortPrice)
+    Button btSortPrice;
+    @Bind(R.id.bt_SortTime)
+    Button btSortTime;
+    @Bind(R.id.srl)
+    SwipeRefreshLayout srl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +117,7 @@ public class CategoryDetails extends AppCompatActivity {
     }
 
     private void initData(final int action, int cartId, int PageId) {
-        NetDao.downloadGoods(this, cartId, PageId, new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
+        NetDao.downloadCategoryGoods(this, cartId, PageId, new OkHttpUtils.OnCompleteListener<NewGoodsBean[]>() {
             @Override
             public void onSuccess(NewGoodsBean[] result) {
                 msrl.setRefreshing(false);
@@ -126,7 +128,6 @@ public class CategoryDetails extends AppCompatActivity {
                         case I.ACTION_DOWNLOAD:
                             mAdapter.setFooter("加载更多数据");
                             mAdapter.inintContact(list);
-                            L.i(list.toString() + "aaaa");
                             break;
                         case I.ACTION_PULL_DOWN:
                             mAdapter.inintContact(list);
@@ -136,12 +137,9 @@ public class CategoryDetails extends AppCompatActivity {
 
                             break;
                     }
-
                 } else {
                     mAdapter.setFooter("没有更多数据了");
                 }
-
-
             }
 
             @Override
@@ -167,5 +165,30 @@ public class CategoryDetails extends AppCompatActivity {
         fagRlvNewgoods.setAdapter(mAdapter);
     }
 
+    boolean addTimeAsc = false;
+    boolean priceAsc = false;
+    int sortBy = I.SORT_BY_ADDTIME_ASC;
 
+    @OnClick({R.id.bt_SortPrice, R.id.bt_SortTime})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.bt_SortPrice:
+                if (priceAsc) {
+                    sortBy = I.SORT_BY_PRICE_ASC;
+                } else {
+                    sortBy = I.SORT_BY_PRICE_DESC;
+                }
+                priceAsc = !priceAsc;
+                break;
+            case R.id.bt_SortTime:
+                if (addTimeAsc) {
+                    sortBy = I.SORT_BY_ADDTIME_ASC;
+                } else {
+                    sortBy = I.SORT_BY_ADDTIME_DESC;
+                }
+                addTimeAsc = !addTimeAsc;
+                break;
+        }
+        mAdapter.setSortBy(sortBy);
+    }
 }

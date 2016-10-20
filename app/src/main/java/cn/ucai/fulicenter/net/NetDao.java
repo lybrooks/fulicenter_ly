@@ -28,7 +28,6 @@ public class NetDao {
     }
 
 
-
     /**
      * 下载商品详情
      */
@@ -52,16 +51,7 @@ public class NetDao {
                 .targetClass(NewGoodsBean[].class)
                 .execute(listener);
     }
-    /**下载分类页面商品详情*/
-    public static void downloadGoods(Context context, int cartId, int pageId, OkHttpUtils.OnCompleteListener<NewGoodsBean[]> listener) {
-        OkHttpUtils utils = new OkHttpUtils(context);
-        utils.setRequestUrl(I.REQUEST_FIND_GOODS_DETAILS)
-                .addParam(I.NewAndBoutiqueGoods.CAT_ID, String.valueOf(cartId))
-                .addParam(I.PAGE_ID, String.valueOf(pageId))
-                .addParam(I.PAGE_SIZE, String.valueOf(I.PAGE_SIZE_DEFAULT))
-                .targetClass(NewGoodsBean[].class)
-                .execute(listener);
-    }
+
 
     /**
      * 下载精选一级页面
@@ -95,6 +85,19 @@ public class NetDao {
                 .addParam(I.PAGE_ID, I.PAGE_ID_DEFAULT + "")
                 .addParam(I.PAGE_SIZE, I.PAGE_SIZE_DEFAULT + "")
                 .targetClass(CategoryChildBean[].class)
+                .execute(listener);
+    }
+
+    /**
+     * 下载分类页面商品详情
+     */
+    public static void downloadCategoryGoods(Context context, int cartId, int pageId, OkHttpUtils.OnCompleteListener<NewGoodsBean[]> listener) {
+        OkHttpUtils utils = new OkHttpUtils(context);
+        utils.setRequestUrl(I.REQUEST_FIND_GOODS_DETAILS)
+                .addParam(I.NewAndBoutiqueGoods.CAT_ID, String.valueOf(cartId))
+                .addParam(I.PAGE_ID, String.valueOf(pageId))
+                .addParam(I.PAGE_SIZE, String.valueOf(I.PAGE_SIZE_DEFAULT))
+                .targetClass(NewGoodsBean[].class)
                 .execute(listener);
     }
 }
