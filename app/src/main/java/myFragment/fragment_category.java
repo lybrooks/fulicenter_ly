@@ -49,13 +49,25 @@ public class Fragment_category extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category, container, false);
         ButterKnife.bind(this, view);
+      // ExpandableListView ELV = (ExpandableListView) view.findViewById(R.id.ELV);
+        initData();
         groupList = new ArrayList<>();
         chillist = new ArrayList<>();
-        categoryAdapter = new CategoryAdapter(getContext(), groupList, chillist);
+        categoryAdapter = new CategoryAdapter(getContext(), groupList, chillist,ELV);
         ELV.setAdapter(categoryAdapter);
-        initData();
+        setListener();
         return view;
 
+    }
+
+    private void setListener() {
+        srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                srl.setRefreshing(true);
+                srl.setEnabled(true);
+            }
+        });
     }
 
     private void initData() {
@@ -64,7 +76,9 @@ public class Fragment_category extends Fragment {
             public void onSuccess(CategoryGroupBean[] result) {
                 ArrayList<CategoryGroupBean> categorylist = ConvertUtils.array2List(result);
                 categoryAdapter.addlist(categorylist);
-                for(CategoryGroupBean group:result){
+                srl.setRefreshing(false);
+                srl.setEnabled(false);
+       /*         for (CategoryGroupBean group : result) {
                     NetDao.downloadCategoryChild(getContext(), group.getId(), new OkHttpUtils.OnCompleteListener<CategoryChildBean[]>() {
                         @Override
                         public void onSuccess(CategoryChildBean[] result) {
@@ -77,11 +91,12 @@ public class Fragment_category extends Fragment {
 
                         }
                     });
-                }
+                }*/
             }
+
             @Override
             public void onError(String error) {
-
+                srl.setRefreshing(false);
             }
         });
 
