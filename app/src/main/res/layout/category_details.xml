@@ -13,7 +13,8 @@
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/back_press" />
+            android:src="@mipmap/back_press"
+            />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -33,7 +34,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:src="@mipmap/arrow2_up" />
+                android:src="@mipmap/arrow2_up"
+                android:id="@+id/iv_arrowup"
+                />
         </LinearLayout>
     </RelativeLayout>
 
@@ -64,6 +67,6 @@
             />
 
     </LinearLayout>
-    <include layout="@layout/fragment_newgoods" android:id="@+id/details"/>
+    <include layout="@layout/fragment_newgoods" />
 
 </LinearLayout>

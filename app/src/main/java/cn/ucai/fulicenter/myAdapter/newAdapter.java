@@ -68,7 +68,6 @@ import day.myfulishe.R;
     public void inintContact(ArrayList<NewGoodsBean> list) {
         this.contactList.clear();
         this.contactList.addAll(list);
-
         notifyDataSetChanged();
     }
 
