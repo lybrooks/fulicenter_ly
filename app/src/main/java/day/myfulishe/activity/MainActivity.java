@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.ucai.fulicenter.utils.L;
+import cn.ucai.fulicenter.utils.MFGT;
 import day.myfulishe.R;
 import myFragment.Fragment_Login;
 import myFragment.Fragment_boutique;
@@ -42,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     RadioButton[] mrb;
     int index;
-    boolean isLogin = false;
+    public static boolean isLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,14 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initView();
         initFragment();
+
+        int intExtra = getIntent().getIntExtra("index", 0);
+        L.i("index:"+intExtra+"");
+        if (intExtra != 0) {
+            index = intExtra;
+            mVP.setCurrentItem(index);
+        }
+
     }
 
     private void initFragment() {
@@ -73,20 +84,19 @@ public class MainActivity extends AppCompatActivity {
         Fragment_category category = new Fragment_category();
         Fragment_cart cart = new Fragment_cart();
         Fragment_personal personal = new Fragment_personal();
-        Fragment_Login login = new Fragment_Login();
+        //Fragment_Login login = new Fragment_Login();
+
 
         fragmentArrayList.add(newgoods);
         fragmentArrayList.add(boutique);
         fragmentArrayList.add(category);
         fragmentArrayList.add(cart);
-        if (isLogin) {
-            fragmentArrayList.add(personal);
-        }else {
-            fragmentArrayList.add(login);
-        }
-
+//        if (isLogin) {
+        fragmentArrayList.add(personal);
+//        } else {
+        //        fragmentArrayList.add(login);
+//      }
         fragmentManager = getSupportFragmentManager();
-
 
         MyViewPage VP_Adapter = new MyViewPage(fragmentManager, fragmentArrayList);
 /*        mVP.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -129,12 +139,27 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         setViewPageAndRadioButtonStatus();
+        setViewPage();
     }
+
+    private void setViewPage() {
+        for (int i = 0; i < mrb.length; i++) {
+            if (i == index) {
+                if (i == mrb.length - 1 && !isLogin) {
+                    MFGT.startActivity(this, Login.class);
+                    return;
+                }
+                mVP.setCurrentItem(i);
+            }
+
+        }
+    }
+
 
     private void setViewPageAndRadioButtonStatus() {
         for (int i = 0; i < mrb.length; i++) {
             if (i == index) {
-                mVP.setCurrentItem(i);
+                //  mVP.setCurrentItem(i);
                 mrb[i].setChecked(true);
             } else {
                 mrb[i].setChecked(false);
@@ -167,4 +192,5 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().hide(fragmentArrayList.get(position));
         }
     }
+
 }
