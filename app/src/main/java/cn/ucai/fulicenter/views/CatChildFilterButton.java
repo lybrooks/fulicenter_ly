@@ -1,5 +1,6 @@
 package cn.ucai.fulicenter.views;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -149,11 +150,12 @@ public class CatChildFilterButton extends Button {
                     if(mPopupWindow.isShowing()){
                         mPopupWindow.dismiss();
                     }
-                    Intent intent=new Intent(mContext, CategoryDetails.class);
+                 /*   Intent intent=new Intent(mContext, CategoryDetails.class);
                     intent.putExtra(I.CategoryChild.CAT_ID, child.getId());
                     intent.putExtra("childList", Children);
                     intent.putExtra(I.CategoryGroup.NAME, child.getName());
-                    mContext.startActivity(intent);
+                    mContext.startActivity(intent);*/
+                    MFGT.gotoCategoryDtails((Activity) mContext,child.getId(),Children,child.getName());
                     ((CategoryDetails)mContext).finish();
                 }
             });

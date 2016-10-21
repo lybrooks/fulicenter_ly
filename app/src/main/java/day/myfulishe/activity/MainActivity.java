@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import day.myfulishe.R;
+import myFragment.Fragment_Login;
 import myFragment.Fragment_boutique;
 import myFragment.Fragment_cart;
 import myFragment.Fragment_category;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     RadioButton[] mrb;
     int index;
+    boolean isLogin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +73,17 @@ public class MainActivity extends AppCompatActivity {
         Fragment_category category = new Fragment_category();
         Fragment_cart cart = new Fragment_cart();
         Fragment_personal personal = new Fragment_personal();
+        Fragment_Login login = new Fragment_Login();
 
         fragmentArrayList.add(newgoods);
         fragmentArrayList.add(boutique);
         fragmentArrayList.add(category);
         fragmentArrayList.add(cart);
-        fragmentArrayList.add(personal);
+        if (isLogin) {
+            fragmentArrayList.add(personal);
+        }else {
+            fragmentArrayList.add(login);
+        }
 
         fragmentManager = getSupportFragmentManager();
 

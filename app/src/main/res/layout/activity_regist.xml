@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="day.myfulishe.activity.Regist"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/tab_bg">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/back_nomal" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="140dp"
+            android:text="账户注册"
+            android:textSize="25sp" />
+    </LinearLayout>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@mipmap/icon_account"
+        android:hint="用户名"
+        android:singleLine="true"
+        android:textSize="22dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/Et_UserName"
+        />
+
+    <EditText
+        android:id="@+id/ET_Nick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@mipmap/icon_account"
+        android:hint="昵称"
+        android:inputType="textPassword"
+        android:singleLine="true"
+        android:textSize="22dp"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@mipmap/icon_pwd"
+        android:hint="密码"
+        android:singleLine="true"
+        android:textSize="22dp"
+        android:id="@+id/Et_Password_regist"
+        />
+
+    <EditText
+        android:id="@+id/ET_rePassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableRight="@mipmap/icon_pwd"
+        android:hint="确认密码"
+        android:inputType="textPassword"
+        android:singleLine="true"
+        android:textSize="22dp"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="免费注册"
+        android:textSize="20sp"
+        android:background="@color/main_orange"
+        android:layout_marginRight="40dp"
+        android:layout_marginLeft="40dp"
+        />
+
+</LinearLayout>
