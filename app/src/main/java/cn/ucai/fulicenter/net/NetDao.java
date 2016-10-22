@@ -10,6 +10,7 @@ import cn.ucai.fulicenter.bean.GoodsDetailsBean;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
 import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.bean.UserAvatar;
+import cn.ucai.fulicenter.utils.MD5;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import day.myfulishe.activity.Regist;
 
@@ -113,7 +114,7 @@ public class NetDao {
                 .post()
                 .addParam(I.User.USER_NAME, username)
                 .addParam(I.User.NICK, nick)
-                .addParam(I.User.PASSWORD, password)
+                .addParam(I.User.PASSWORD, MD5.getMessageDigest(password))
                 .targetClass(Result.class)
                 .execute(litener);
     }
@@ -123,7 +124,7 @@ public class NetDao {
         OkHttpUtils<UserAvatar> utils = new OkHttpUtils<UserAvatar>(context);
         utils.setRequestUrl(I.REQUEST_LOGIN)
                 .addParam(I.User.USER_NAME, username)
-                .addParam(I.User.PASSWORD, password)
+                .addParam(I.User.PASSWORD, MD5.getMessageDigest(password))
                 .targetClass(UserAvatar.class)
                 .execute(listener);
 

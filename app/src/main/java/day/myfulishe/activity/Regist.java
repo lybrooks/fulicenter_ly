@@ -18,7 +18,6 @@ import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import day.myfulishe.R;
-import myFragment.Fragment_Login;
 
 public class Regist extends AppCompatActivity {
 
@@ -63,8 +62,8 @@ public class Regist extends AppCompatActivity {
                         Toast.makeText(Regist.this, "注册成功", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(Regist.this, Login.class);
                         intent.putExtra("username", username);
-                        setResult(RESULT_OK,intent);
-                        //startActivity(intent);
+                        //setResult(RESULT_OK,intent);
+                        startActivity(intent);
                         MFGT.finish(Regist.this);
                     } else {
                         CommonUtils.showLongToast(R.string.register_fail_exists);

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -18,7 +17,6 @@ import butterknife.ButterKnife;
 import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.MFGT;
 import day.myfulishe.R;
-import myFragment.Fragment_Login;
 import myFragment.Fragment_boutique;
 import myFragment.Fragment_cart;
 import myFragment.Fragment_category;
@@ -54,12 +52,12 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initView();
         initFragment();
-
         int intExtra = getIntent().getIntExtra("index", 0);
-        L.i("index:"+intExtra+"");
+        L.i("index:" + intExtra + "");
         if (intExtra != 0) {
             index = intExtra;
             mVP.setCurrentItem(index);
+            MFGT.finish(MainActivity.this);
         }
 
     }
@@ -99,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
 
         MyViewPage VP_Adapter = new MyViewPage(fragmentManager, fragmentArrayList);
-/*        mVP.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mVP.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -107,6 +105,24 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        index = 0;
+                        break;
+                    case 1:
+                        index = 1;
+                        break;
+                    case 2:
+                        index = 2;
+                        break;
+                    case 3:
+                        index = 3;
+                        break;
+                    case 4:
+                        index = 4;
+                        break;
+                }
+                setRadioButtonStatus();
 
             }
 
@@ -114,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int state) {
 
             }
-        });*/
+        });
         mVP.setAdapter(VP_Adapter);
 
 
@@ -138,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
                 index = 4;
                 break;
         }
-        setViewPageAndRadioButtonStatus();
+        setRadioButtonStatus();
         setViewPage();
     }
 
@@ -147,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
             if (i == index) {
                 if (i == mrb.length - 1 && !isLogin) {
                     MFGT.startActivity(this, Login.class);
+                    L.i("MainAcivity:跳转到登录页面");
                     return;
                 }
                 mVP.setCurrentItem(i);
@@ -156,10 +173,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void setViewPageAndRadioButtonStatus() {
+    private void setRadioButtonStatus() {
         for (int i = 0; i < mrb.length; i++) {
             if (i == index) {
-                //  mVP.setCurrentItem(i);
                 mrb[i].setChecked(true);
             } else {
                 mrb[i].setChecked(false);

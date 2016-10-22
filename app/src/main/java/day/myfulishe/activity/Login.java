@@ -12,6 +12,7 @@ import butterknife.OnClick;
 import cn.ucai.fulicenter.bean.UserAvatar;
 import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.CommonUtils;
+import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import day.myfulishe.R;
@@ -45,6 +46,7 @@ public class Login extends AppCompatActivity {
                 NetDao.Login(this, user, password, new OkHttpUtils.OnCompleteListener<UserAvatar>() {
                     @Override
                     public void onSuccess(UserAvatar result) {
+
                         if (result == null) {
                             CommonUtils.showShortToast("登录失败");
                         } else {
@@ -53,7 +55,12 @@ public class Login extends AppCompatActivity {
                             Intent intent = new Intent(Login.this, MainActivity.class);
                             intent.putExtra("index", 4);
                             startActivity(intent);
-                        }
+                            L.i("LoIn:跳转到主界面");
+                            MFGT.finish(Login.this);
+                            L.i("LoIn:关闭Login页面");
+                     //       startActivityForResult(intent,4);
+
+                         }
                     }
 
                     @Override
@@ -65,11 +72,13 @@ public class Login extends AppCompatActivity {
             case R.id.btn_regist:
                 Intent intent = new Intent(this, Regist.class);
                 startActivity(intent);
+                MFGT.finish(Login.this);
                 break;
         }
     }
 
-/*    @Override
+
+    /*    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
          if(requestCode==1&&resultCode==RESULT_OK){
