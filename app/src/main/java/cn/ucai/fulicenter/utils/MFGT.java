@@ -10,8 +10,10 @@ import cn.ucai.fulicenter.bean.CategoryChildBean;
 import day.myfulishe.activity.Boutique;
 import day.myfulishe.activity.CategoryDetails;
 import day.myfulishe.activity.Deails;
+import day.myfulishe.activity.Login;
 import day.myfulishe.activity.MainActivity;
 import day.myfulishe.R;
+import day.myfulishe.activity.Regist;
 
 
 public class MFGT {
@@ -33,7 +35,7 @@ public class MFGT {
 
     public static void gotoGoodsDtails(Activity context, int Goodsid) {
         Intent intent = new Intent(context, Deails.class);
-        intent.putExtra(I.GoodsDetails.KEY_GOODS_ID,Goodsid);
+        intent.putExtra(I.GoodsDetails.KEY_GOODS_ID, Goodsid);
         startActivity(context, intent);
     }
 
@@ -42,21 +44,36 @@ public class MFGT {
         context.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
-    public static void gotoCategoryDtails(Activity context,int id,ArrayList<CategoryChildBean> list,String name){
-        Intent intent = new Intent(context,CategoryDetails.class);
-        intent.putExtra(I.CategoryChild.CAT_ID,id);
-        intent.putExtra("childList",list);
-        intent.putExtra(I.CategoryGroup.NAME,name);
-        startActivity(context,intent);
+    public static void gotoCategoryDtails(Activity context, int id, ArrayList<CategoryChildBean> list, String name) {
+        Intent intent = new Intent(context, CategoryDetails.class);
+        intent.putExtra(I.CategoryChild.CAT_ID, id);
+        intent.putExtra("childList", list);
+        intent.putExtra(I.CategoryGroup.NAME, name);
+        startActivity(context, intent);
     }
-    public static void gotoBoutique(Activity context,String Title,int cariId){
+
+    public static void gotoBoutique(Activity context, String Title, int cariId) {
         Intent intent = new Intent(context, Boutique.class);
         intent.putExtra("title", Title);
         intent.putExtra("cartId", cariId);
-        startActivity(context,intent);
+        startActivity(context, intent);
 
     }
 
+    public static void gotoRegister(Activity context) {
+       // Intent intent = new Intent(context, Regist.class);
+       // startActivityForResult(context,intent,I.REQUEST_CODE_REGISTER);
+    }
 
 
+    public static void gotoLogin(Activity mContext) {
+        Intent intent = new Intent();
+        intent.setClass(mContext, Login.class);
+        startActivityForResult(mContext, intent, I.REQUEST_CODE_LOGIN);
+    }
+
+    private static void startActivityForResult(Activity mContext, Intent intent, int requestCode) {
+        mContext.startActivityForResult(intent, requestCode);
+        mContext.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+    }
 }

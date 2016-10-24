@@ -1,5 +1,6 @@
 package day.myfulishe.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.MFGT;
 import day.myfulishe.R;
@@ -43,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
     RadioButton[] mrb;
     int index;
-    public static boolean isLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +53,13 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initView();
         initFragment();
-        int intExtra = getIntent().getIntExtra("index", 0);
-        L.i("index:" + intExtra + "");
-        if (intExtra != 0) {
-            index = intExtra;
-            mVP.setCurrentItem(index);
-            MFGT.finish(MainActivity.this);
-        }
+//        int intExtra = getIntent().getIntExtra("index", 0);
+//        L.i("index:" + intExtra + "");
+//        if (intExtra != 0) {
+//            index = intExtra;
+//            mVP.setCurrentItem(index);
+//            MFGT.finish(MainActivity.this);
+//        }
 
     }
 
@@ -82,21 +83,18 @@ public class MainActivity extends AppCompatActivity {
         Fragment_category category = new Fragment_category();
         Fragment_cart cart = new Fragment_cart();
         Fragment_personal personal = new Fragment_personal();
-        //Fragment_Login login = new Fragment_Login();
 
 
         fragmentArrayList.add(newgoods);
         fragmentArrayList.add(boutique);
         fragmentArrayList.add(category);
         fragmentArrayList.add(cart);
-//        if (isLogin) {
         fragmentArrayList.add(personal);
-//        } else {
-        //        fragmentArrayList.add(login);
-//      }
+
         fragmentManager = getSupportFragmentManager();
 
         MyViewPage VP_Adapter = new MyViewPage(fragmentManager, fragmentArrayList);
+        /**底部菜单跟着ViewPager滑动*/
         mVP.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -123,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
                 setRadioButtonStatus();
-
             }
 
             @Override
@@ -151,24 +148,26 @@ public class MainActivity extends AppCompatActivity {
                 index = 3;
                 break;
             case R.id.rb_item_personal:
-                index = 4;
-                break;
-        }
-        setRadioButtonStatus();
-        setViewPage();
+                if (FuLiCenterApplication.getUserBean() == null) {
+                    MFGT.gotoLogin(this);
+                } else
+                    index = 4;
+
+        break;
     }
+    setRadioButtonStatus();
+    setViewPage();
+}
 
     private void setViewPage() {
         for (int i = 0; i < mrb.length; i++) {
             if (i == index) {
-                if (i == mrb.length - 1 && !isLogin) {
-                    MFGT.startActivity(this, Login.class);
-                    L.i("MainAcivity:跳转到登录页面");
-                    return;
-                }
+//                if (i == mrb.length - 1 && FuLiCenterApplication.getUserBean() == null) {
+//                    MFGT.startActivity(this, Login.class);
+//                    return;
+//                }
                 mVP.setCurrentItem(i);
             }
-
         }
     }
 
@@ -184,29 +183,43 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setViewPage();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode== I.REQUEST_CODE_LOGIN&&FuLiCenterApplication.getUserBean()!=null){
+            index =4;
+        }
+
+    }
 
     class MyViewPage extends FragmentPagerAdapter {
-        ArrayList<Fragment> arrayList;
+    ArrayList<Fragment> arrayList;
 
-        public MyViewPage(FragmentManager fm, ArrayList<Fragment> arrayList) {
-            super(fm);
-            this.arrayList = arrayList;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return fragmentArrayList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragmentArrayList.size();
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            getSupportFragmentManager().beginTransaction().hide(fragmentArrayList.get(position));
-        }
+    public MyViewPage(FragmentManager fm, ArrayList<Fragment> arrayList) {
+        super(fm);
+        this.arrayList = arrayList;
     }
+
+    @Override
+    public Fragment getItem(int position) {
+        return fragmentArrayList.get(position);
+    }
+
+    @Override
+    public int getCount() {
+        return fragmentArrayList.size();
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        getSupportFragmentManager().beginTransaction().hide(fragmentArrayList.get(position));
+    }
+}
 
 }

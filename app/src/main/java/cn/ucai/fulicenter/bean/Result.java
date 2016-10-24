@@ -15,7 +15,7 @@ public class Result implements Serializable {
 
     private int retCode;
     private boolean retMsg;
-    private RetDataBean retData;
+    private Object retData;
 
     public int getRetCode() {
         return retCode;
@@ -33,11 +33,11 @@ public class Result implements Serializable {
         this.retMsg = retMsg;
     }
 
-    public RetDataBean getRetData() {
+    public Object getRetData() {
         return retData;
     }
 
-    public void setRetData(RetDataBean retData) {
+    public void setRetData(Object retData) {
         this.retData = retData;
     }
 

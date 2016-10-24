@@ -70,7 +70,6 @@ public class Regist extends AppCompatActivity {
                     }
                 }
             }
-
             @Override
             public void onError(String error) {
 

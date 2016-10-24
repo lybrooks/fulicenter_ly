@@ -10,6 +10,7 @@ import cn.ucai.fulicenter.bean.GoodsDetailsBean;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
 import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.bean.UserAvatar;
+import cn.ucai.fulicenter.bean.UserBean;
 import cn.ucai.fulicenter.utils.MD5;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import day.myfulishe.activity.Regist;
@@ -119,13 +120,15 @@ public class NetDao {
                 .execute(litener);
     }
 
-    /**登录请求*/
-    public static void Login(Context context, String username, String password, OkHttpUtils.OnCompleteListener<UserAvatar> listener) {
-        OkHttpUtils<UserAvatar> utils = new OkHttpUtils<UserAvatar>(context);
+    /**
+     * 登录请求
+     */
+    public static void Login(Context context, String username, String password, OkHttpUtils.OnCompleteListener<Result> listener) {
+        OkHttpUtils<Result> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_LOGIN)
                 .addParam(I.User.USER_NAME, username)
                 .addParam(I.User.PASSWORD, MD5.getMessageDigest(password))
-                .targetClass(UserAvatar.class)
+                .targetClass(Result.class)
                 .execute(listener);
 
     }

@@ -33,7 +33,7 @@ public class DBManager {
      */
     public synchronized UserBean getuser(String username) {
         SQLiteDatabase db = mHelper.getWritableDatabase();
-        String sql = "select * form " + UserDao.USER_TABLE_NAME + " where"
+        String sql = "select * from " + UserDao.USER_TABLE_NAME + " where "
                 + UserDao.USER_COLUME_NAME + " =?";
         UserBean user = null;
         Cursor cursor = db.rawQuery(sql, new String[]{username});

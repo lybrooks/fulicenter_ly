@@ -1,21 +1,25 @@
 package day.myfulishe.activity;
 
-import android.content.Intent;
-import android.os.SystemClock;
-import android.provider.Settings;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import cn.ucai.fulicenter.bean.UserBean;
+import cn.ucai.fulicenter.dao.UserDao;
+import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.MFGT;
+import cn.ucai.fulicenter.utils.SharedPerfenceUtils;
 import day.myfulishe.R;
 
 public class SplashActivity extends AppCompatActivity {
     final long splashtime = 2000;
+    SplashActivity mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        mContext = this;
     }
 
     @Override
@@ -33,8 +37,20 @@ public class SplashActivity extends AppCompatActivity {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-
+                    UserBean user = FuLiCenterApplication.getUserBean();
+                    L.e("fulicentener,user=" + user);
+                    String username = SharedPerfenceUtils.getInstance(mContext).getUser();
+                    L.e("fulicentener,username=" + username);
+                    if (user == null && username != null) {
+                        UserDao dao = new UserDao(mContext);
+                        user = dao.getUser(username);
+                        L.e("database,user=" + user);
+                        if (user != null) {
+                            FuLiCenterApplication.getInstance().setUsernane(user.getMuserName());
+                        }
+                    }
                     MFGT.gotoMainActivity(SplashActivity.this);
+                    finish();
                 }
             }
         }).start();
