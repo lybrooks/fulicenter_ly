@@ -1,8 +1,8 @@
 package day.myfulishe.activity;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -82,13 +82,13 @@ public class MySetting extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode != RESULT_OK) {
+        if (resultCode != RESULT_OK) {
             return;
         }
-        if (resultCode == RESULT_OK && requestCode == I.REQUEST_CODE_NICK) {
+        setAvatarListener.setAvatar(requestCode, data, ivUserAvatar);
+        if (requestCode == RESULT_OK && requestCode == I.REQUEST_CODE_NICK) {
             CommonUtils.showLongToast("update_user_nick_success");
         }
-        setAvatarListener.setAvatar(requestCode, data, ivUserAvatar);
         if (requestCode == OnSetAvatarListener.REQUEST_CROP_PHOTO) {
             updateAavatar();
         }
@@ -99,19 +99,32 @@ public class MySetting extends AppCompatActivity {
                 OnSetAvatarListener.getAvatarPath(mContext, userBean.getMavatarPath() + "/" + userBean.getMuserName()
                         + I.AVATAR_SUFFIX_JPG)
         ));
+        final ProgressDialog pd = new ProgressDialog(mContext);
         L.e("file" + file.exists());
         L.e("file" + file.getAbsolutePath());
+        pd.show();
         NetDao.updateAvatar(mContext, userBean.getMuserName(), file, new OkHttpUtils.OnCompleteListener<String>() {
             @Override
             public void onSuccess(String s) {
                 Result result = ResultUtils.getResultFromJson(s, UserBean.class);
-                UserBean userBean = (UserBean) result.getRetData();
-
+                if (result == null) {
+                    CommonUtils.showLongToast("上传用户头像失败");
+                } else {
+                    UserBean u = (UserBean) result.getRetData();
+                    if (result.isRetMsg()) {
+                        FuLiCenterApplication.getInstance().setUserBean(u);
+                        ImageLoader.setAcatar(ImageLoader.getAcatarUrl(u), mContext, ivUserAvatar);
+                        CommonUtils.showLongToast("修改用户头像成功");
+                    } else {
+                        CommonUtils.showLongToast("上传用户头像失败");
+                    }
+                }
+                pd.dismiss();
             }
 
             @Override
             public void onError(String error) {
-
+                CommonUtils.showLongToast("上传用户头像失败");
             }
         });
     }
@@ -129,13 +142,22 @@ public class MySetting extends AppCompatActivity {
                 MFGT.goUpdateNick(mContext);
                 break;
             case R.id.bt_Quit:
-                if (userBean != null) {
-                    SharedPerfenceUtils.getInstance(mContext).removeUser();
-                    FuLiCenterApplication.getInstance().setUsernane(null);
-                    MFGT.gotoLogin(mContext);
-                }
-                finish();
+                logout();
                 break;
         }
+    }
+
+    private void logout() {
+        if (userBean != null) {
+            SharedPerfenceUtils.getInstance(mContext).removeUser();
+            FuLiCenterApplication.getInstance().setUserBean(null);
+            MFGT.gotoLogin(mContext);
+        }
+        finish();
+    }
+
+    @OnClick(R.id.iv_back)
+    public void onClick() {
+        this.finish();
     }
 }

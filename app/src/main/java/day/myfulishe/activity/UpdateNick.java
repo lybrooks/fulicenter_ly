@@ -87,8 +87,8 @@ public class UpdateNick extends AppCompatActivity {
         NetDao.updateNick(mContext, muserName, usernick, new OkHttpUtils.OnCompleteListener<String>() {
                     @Override
                     public void onSuccess(String s) {
-                       Result result = ResultUtils.getResultFromJson(s,Result.class);
-                        if (result != null && result.getRetCode() == 0) {
+                       Result result = ResultUtils.getResultFromJson(s,UserBean.class);
+                        if (result != null ) {
                             pd.dismiss();
                             L.e(result.toString());
                             UserBean user = (UserBean) result.getRetData();

@@ -37,6 +37,7 @@ public class SplashActivity extends AppCompatActivity {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+
                     UserBean user = FuLiCenterApplication.getUserBean();
                     L.e("fulicentener,user=" + user);
                     String username = SharedPerfenceUtils.getInstance(mContext).getUser();
@@ -46,7 +47,7 @@ public class SplashActivity extends AppCompatActivity {
                         user = dao.getUser(username);
                         L.e("database,user=" + user);
                         if (user != null) {
-                            FuLiCenterApplication.getInstance().setUsernane(user.getMuserName());
+                            FuLiCenterApplication.getInstance().setUserBean(user);
                         }
                     }
                     MFGT.gotoMainActivity(SplashActivity.this);

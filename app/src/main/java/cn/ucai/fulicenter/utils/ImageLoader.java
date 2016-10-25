@@ -386,7 +386,7 @@ public class ImageLoader {
             String url = I.DOWNLOAD_ACATAR_URL + I.NAME_OR_HXID + "=" +
                     userBean.getMuserName() + I.AND + I.AVATAR_TYPE + "="
                     + userBean.getMavatarPath()+ I.AND + I.AVATAR_SUFFIX +
-                    "=" + userBean.getMavatarSuffix() + I.AND + "width=200&height=200";
+                    "=" + userBean.getMavatarSuffix() + I.AND + "width=200&height=200"+I.AND+userBean.getMavatarLastUpdateTime();
             return url;
         }
         return null;

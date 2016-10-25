@@ -2,6 +2,8 @@ package cn.ucai.fulicenter.net;
 
 import android.content.Context;
 
+import java.io.File;
+
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.bean.BoutiqueBean;
 import cn.ucai.fulicenter.bean.CategoryChildBean;
@@ -13,6 +15,7 @@ import cn.ucai.fulicenter.bean.UserAvatar;
 import cn.ucai.fulicenter.bean.UserBean;
 import cn.ucai.fulicenter.utils.MD5;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
+import day.myfulishe.activity.MySetting;
 import day.myfulishe.activity.Regist;
 
 /**
@@ -109,27 +112,51 @@ public class NetDao {
     /**
      * 注册请求
      */
-    public static void UserRegister(Context context, String username, String nick, String password, OkHttpUtils.OnCompleteListener<Result> litener) {
-        OkHttpUtils<Result> uitls = new OkHttpUtils<Result>(context);
+    public static void UserRegister(Context context, String username, String nick, String password, OkHttpUtils.OnCompleteListener<String> litener) {
+        OkHttpUtils<String> uitls = new OkHttpUtils<String>(context);
         uitls.setRequestUrl(I.REQUEST_REGISTER)
                 .post()
                 .addParam(I.User.USER_NAME, username)
                 .addParam(I.User.NICK, nick)
                 .addParam(I.User.PASSWORD, MD5.getMessageDigest(password))
-                .targetClass(Result.class)
+                .targetClass(String.class)
                 .execute(litener);
     }
 
     /**
      * 登录请求
      */
-    public static void Login(Context context, String username, String password, OkHttpUtils.OnCompleteListener<Result> listener) {
-        OkHttpUtils<Result> utils = new OkHttpUtils<>(context);
+    public static void Login(Context context, String username, String password, OkHttpUtils.OnCompleteListener<String> listener) {
+        OkHttpUtils<String> utils = new OkHttpUtils<>(context);
         utils.setRequestUrl(I.REQUEST_LOGIN)
                 .addParam(I.User.USER_NAME, username)
                 .addParam(I.User.PASSWORD, MD5.getMessageDigest(password))
-                .targetClass(Result.class)
+                .targetClass(String.class)
+                .execute(listener);
+    }
+
+    /**
+     * 修改用户昵称
+     */
+    public static void updateNick(Context context, String username, String nick, OkHttpUtils.OnCompleteListener<String> listener) {
+        OkHttpUtils<String> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_UPDATE_USER_NICK)
+                .addParam(I.User.USER_NAME,username)
+                .addParam(I.User.NICK,nick)
+                .targetClass(String.class)
                 .execute(listener);
 
+    }
+
+    /**更改头像*/
+    public static void updateAvatar(MySetting context, String muserName, File file, OkHttpUtils.OnCompleteListener<String> listener) {
+        OkHttpUtils<String> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_UPDATE_AVATAR)
+                .post()
+                .addParam(I.User.USER_NAME,muserName)
+                .addParam(I.AVATAR_TYPE,I.AVATAR_TYPE_USER_PATH)
+                .addFile2(file)
+                .targetClass(String.class)
+                .execute(listener);
     }
 }

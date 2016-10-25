@@ -73,6 +73,7 @@ public class Login extends AppCompatActivity {
                                 dao.savaUser(user);
                                 boolean isSuccess =dao.savaUser(user);
                                 if (isSuccess){
+                                    SharedPerfenceUtils.getInstance(mContext).saveuser(user.getMuserName());
                                     FuLiCenterApplication.getInstance().setUserBean(user);
                                     MFGT.finish(mContext);
                                 }else {

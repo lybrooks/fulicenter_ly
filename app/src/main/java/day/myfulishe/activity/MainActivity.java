@@ -152,7 +152,6 @@ public class MainActivity extends AppCompatActivity {
                     MFGT.gotoLogin(this);
                 } else
                     index = 4;
-
                 break;
         }
         setRadioButtonStatus();
@@ -184,9 +183,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         if (index == 4 && FuLiCenterApplication.getUserBean() == null) {
             index = 0;
-            mVP.setCurrentItem(0);
         }
-
+        setViewPage();
     }
 
     @Override
@@ -195,7 +193,6 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == I.REQUEST_CODE_LOGIN && FuLiCenterApplication.getUserBean() != null) {
             index = 4;
         }
-
     }
 
     class MyViewPage extends FragmentPagerAdapter {

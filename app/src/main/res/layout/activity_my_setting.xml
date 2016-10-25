@@ -4,141 +4,160 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="day.myfulishe.activity.MySetting">
+    tools:context="day.myfulishe.activity.MySetting"
+    android:id="@+id/Setting"
+    >
 
-    <RelativeLayout
-        android:id="@+id/person_back"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/person_back"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
 
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/back_nomal" />
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/back_nomal" />
 
-        <TextView
-            android:id="@+id/tv_Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:gravity="center_horizontal"
-            android:text="个人资料"
-            android:textSize="30dp" />
+            <TextView
+                android:id="@+id/tv_Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"
+                android:text="个人资料"
+                android:textSize="30dp" />
+
+            <View
+                style="@style/style_divide_line"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:layout_below="@+id/tv_Title" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/RL_UserAvatar"
+                >
+
+                <TextView
+                    android:id="@+id/text_avatar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:text="个人头像"
+                    android:textSize="22dp" />
+
+                <ImageView
+                    android:id="@+id/iv_User_avatar"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp"
+                    android:src="@mipmap/user_avatar" />
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="140dp"
+                    android:layout_toRightOf="@+id/iv_User_avatar"
+                    android:src="@mipmap/arrow2_right" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
 
         <View
             style="@style/style_divide_line"
             android:layout_width="match_parent"
-            android:layout_height="6dp"
-            android:layout_below="@+id/tv_Title" />
-    </RelativeLayout>
+            android:layout_height="1dp"
+            android:layout_below="@+id/iv_User_avatar" />
 
-    <TextView
-        android:id="@+id/text_avatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/person_back"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
-        android:text="个人头像"
-        android:textSize="22dp" />
-
-    <ImageView
-        android:id="@+id/iv_User_avatar"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/person_back"
-        android:layout_marginRight="20dp"
-        android:src="@mipmap/user_avatar" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="140dp"
-        android:layout_toRightOf="@+id/iv_User_avatar"
-        android:src="@mipmap/arrow2_right" />
-
-    <View
-        style="@style/style_divide_line"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/iv_User_avatar" />
-
-    <LinearLayout
-        android:id="@+id/LL"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/iv_User_avatar"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/LL_UpdateUsername"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            android:text="用户名"
-            android:textSize="22dp" />
+            android:layout_below="@+id/iv_User_avatar"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_Username"
-            android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:text="用户名"
+                android:textSize="22dp" />
+
+            <TextView
+                android:id="@+id/tv_Username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="80dp"
+                android:text="帐号信息"
+                android:textSize="18dp" />
+
+            <ImageView
+                android:id="@+id/iv_update_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="140dp"
+                android:src="@mipmap/arrow2_right" />
+        </LinearLayout>
+
+        <View
+            style="@style/style_divide_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/LL" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="80dp"
-            android:text="帐号信息"
-            android:textSize="18dp" />
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:id="@+id/LL_UpdateNick"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:text="昵称"
+                android:textSize="22dp" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="140dp"
-            android:src="@mipmap/arrow2_right"
-            android:id="@+id/iv_update_name"
-            />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tv_UserNick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="80dp"
+                android:text="昵称"
+                android:textSize="18dp" />
 
-    <View
-        style="@style/style_divide_line"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/LL" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/LL"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="5dp"
-            android:text="昵称"
-            android:textSize="22dp" />
-
-        <TextView
-            android:id="@+id/tv_UserNick"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="80dp"
-            android:text="昵称"
-            android:textSize="18dp" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="140dp"
-            android:src="@mipmap/arrow2_right"
-            android:id="@+id/iv_update_nick"
-            />
+            <ImageView
+                android:id="@+id/iv_update_nick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="140dp"
+                android:src="@mipmap/arrow2_right" />
+        </LinearLayout>
     </LinearLayout>
 
     <Button

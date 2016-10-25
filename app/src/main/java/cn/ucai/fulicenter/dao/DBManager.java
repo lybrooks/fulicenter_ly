@@ -83,6 +83,5 @@ public class DBManager {
         }
         return resule > 0;
 
-
     }
 }

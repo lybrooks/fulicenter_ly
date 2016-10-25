@@ -40,13 +40,13 @@ public class ResultUtils {
                         date = URLDecoder.decode(jsonRetData.toString(), I.UTF_8);
                         Log.e("Utils", "jsonRetData=" + date);
                         T t = new Gson().fromJson(date, clazz);
-                        result.setRetData((Result.RetDataBean) t);
+                        result.setRetData(t);
                         return result;
 
                     } catch (UnsupportedEncodingException e1) {
                         e1.printStackTrace();
                         T t = new Gson().fromJson(jsonRetData.toString(), clazz);
-                        result.setRetData((Result.RetDataBean) t);
+                        result.setRetData(t);
                         return result;
                     }
                 }
@@ -58,13 +58,13 @@ public class ResultUtils {
                         date = URLDecoder.decode(jsonObject.toString(), I.UTF_8);
                         Log.e("Utils", "jsonRetData=" + date);
                         T t = new Gson().fromJson(date, clazz);
-                        result.setRetData((Result.RetDataBean) t);
+                        result.setRetData(t);
                         return result;
 
                     } catch (UnsupportedEncodingException e1) {
                         e1.printStackTrace();
                         T t = new Gson().fromJson(jsonObject.toString(), clazz);
-                        result.setRetData((Result.RetDataBean) t);
+                        result.setRetData(t);
                         return result;
                     }
                 }
@@ -101,7 +101,7 @@ public class ResultUtils {
                         T ga = new Gson().fromJson(jsonGroupAvatar.toString(), clazz);
                         list.add(ga);
                     }
-                    result.setRetData((Result.RetDataBean) list);
+                    result.setRetData(list);
                     return result;
                 }
             }else{
@@ -113,7 +113,7 @@ public class ResultUtils {
                         T ga = new Gson().fromJson(jsonGroupAvatar.toString(), clazz);
                         list.add(ga);
                     }
-                    result.setRetData((Result.RetDataBean) list);
+                    result.setRetData(list);
                     return result;
                 }
             }

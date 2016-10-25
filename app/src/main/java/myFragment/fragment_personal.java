@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.ucai.fulicenter.bean.UserBean;
 import cn.ucai.fulicenter.utils.ImageLoader;
 import cn.ucai.fulicenter.utils.MFGT;
@@ -26,9 +27,9 @@ public class Fragment_personal extends Fragment {
     TextView tvPersonalUserName;
 
     MainActivity mContext;
+    UserBean userBean;
 
     public Fragment_personal() {
-        // Required empty public constructor
     }
 
 
@@ -37,17 +38,17 @@ public class Fragment_personal extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_personal, container, false);
         ButterKnife.bind(this, view);
-        mContext= (MainActivity) getActivity();
+        mContext = (MainActivity) getActivity();
         initData();
         return view;
     }
 
     private void initData() {
-        UserBean userBean = FuLiCenterApplication.getUserBean();
+        userBean = FuLiCenterApplication.getUserBean();
         if (userBean == null) {
             MFGT.gotoLogin(mContext);
-        }else {
-            ImageLoader.setAcatar(ImageLoader.getAcatarUrl(userBean),mContext,ivPersonalAvatar);
+        } else {
+            ImageLoader.setAcatar(ImageLoader.getAcatarUrl(userBean), mContext, ivPersonalAvatar);
             tvPersonalUserName.setText(userBean.getMuserNick());
         }
     }
@@ -57,5 +58,19 @@ public class Fragment_personal extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+    @OnClick({R.id.tv_personal_settings, R.id.ll_message})
+    public void onClick() {
+        MFGT.goSettingActivity(getActivity());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (userBean != null) {
+            ImageLoader.setAcatar(ImageLoader.getAcatarUrl(userBean), mContext, ivPersonalAvatar);
+            tvPersonalUserName.setText(userBean.getMuserNick());
+        }
     }
 }

@@ -24,7 +24,7 @@ public class UserDao {
     public boolean savaUser(UserBean user){
         return DBManager.getInstance().saveUser(user);
     }
-    private boolean update(UserBean user){
+    public boolean update(UserBean user){
         return DBManager.getInstance().update(user);
     }
     public UserBean getUser(String username){
