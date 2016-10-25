@@ -10,12 +10,22 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.ucai.fulicenter.I;
+import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.bean.UserBean;
+import cn.ucai.fulicenter.net.NetDao;
+import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.ImageLoader;
+import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.MFGT;
+import cn.ucai.fulicenter.utils.OkHttpUtils;
+import cn.ucai.fulicenter.utils.OnSetAvatarListener;
+import cn.ucai.fulicenter.utils.ResultUtils;
 import cn.ucai.fulicenter.utils.SharedPerfenceUtils;
 import day.myfulishe.R;
 
@@ -36,6 +46,8 @@ public class MySetting extends AppCompatActivity {
 
     MySetting mContext;
     UserBean userBean;
+
+    OnSetAvatarListener setAvatarListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,19 +72,61 @@ public class MySetting extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        initView();
+        showInfo();
+    }
+
+    private void showInfo() {
+        userBean = FuLiCenterApplication.getUserBean();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode != RESULT_OK) {
+            return;
+        }
+        if (resultCode == RESULT_OK && requestCode == I.REQUEST_CODE_NICK) {
+            CommonUtils.showLongToast("update_user_nick_success");
+        }
+        setAvatarListener.setAvatar(requestCode, data, ivUserAvatar);
+        if (requestCode == OnSetAvatarListener.REQUEST_CROP_PHOTO) {
+            updateAavatar();
+        }
+    }
+
+    private void updateAavatar() {
+        File file = new File(OnSetAvatarListener.getAvatarPath(mContext,
+                OnSetAvatarListener.getAvatarPath(mContext, userBean.getMavatarPath() + "/" + userBean.getMuserName()
+                        + I.AVATAR_SUFFIX_JPG)
+        ));
+        L.e("file" + file.exists());
+        L.e("file" + file.getAbsolutePath());
+        NetDao.updateAvatar(mContext, userBean.getMuserName(), file, new OkHttpUtils.OnCompleteListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                Result result = ResultUtils.getResultFromJson(s, UserBean.class);
+                UserBean userBean = (UserBean) result.getRetData();
+
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
     }
 
     @OnClick({R.id.RL_UserAvatar, R.id.LL_UpdateUsername, R.id.LL_UpdateNick, R.id.bt_Quit})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.RL_UserAvatar:
+                setAvatarListener = new OnSetAvatarListener(mContext, R.id.Setting, userBean.getMuserName(), I.AVATAR_TYPE_USER_PATH);
                 break;
             case R.id.LL_UpdateUsername:
+                CommonUtils.showLongToast("用户名不能被更改");
                 break;
             case R.id.LL_UpdateNick:
                 MFGT.goUpdateNick(mContext);
-
                 break;
             case R.id.bt_Quit:
                 if (userBean != null) {

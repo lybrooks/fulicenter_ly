@@ -184,8 +184,9 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         if (index == 4 && FuLiCenterApplication.getUserBean() == null) {
             index = 0;
+            mVP.setCurrentItem(0);
         }
-        setViewPage();
+
     }
 
     @Override

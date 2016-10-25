@@ -13,10 +13,12 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.fulicenter.bean.Result;
+import cn.ucai.fulicenter.bean.UserBean;
 import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
+import cn.ucai.fulicenter.utils.ResultUtils;
 import day.myfulishe.R;
 
 public class Regist extends AppCompatActivity {
@@ -51,11 +53,12 @@ public class Regist extends AppCompatActivity {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage(getResources().getString(R.string.registering));
         pd.show();
-        NetDao.UserRegister(this, username, nick, password, new OkHttpUtils.OnCompleteListener<Result>() {
+        NetDao.UserRegister(this, username, nick, password, new OkHttpUtils.OnCompleteListener<String>() {
             @Override
-            public void onSuccess(Result result) {
+            public void onSuccess(String s) {
+                Result result = ResultUtils.getResultFromJson(s, UserBean.class);
                 pd.dismiss();
-                if (result == null) {
+                if (result.getRetData() == null) {
                     CommonUtils.showShortToast(R.string.register_fail);
                 } else {
                     if (result.isRetMsg()) {

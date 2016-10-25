@@ -15,6 +15,7 @@ import java.util.Map;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.bean.UserAvatar;
 import cn.ucai.fulicenter.bean.UserBean;
@@ -59,37 +60,44 @@ public class Login extends AppCompatActivity {
                 pb.show();
                 final String user = EtUserName.getText().toString().trim();
                 String password = ETPassword.getText().toString().trim();
-                NetDao.Login(this, user, password, new OkHttpUtils.OnCompleteListener<Result>() {
+                NetDao.Login(this, user, password, new OkHttpUtils.OnCompleteListener<String>() {
                     @Override
-                    public void onSuccess(Result result) {
-                        if (result !=null&&result.getRetCode()==0) {
-                            pb.dismiss();
-                            L.e(result.toString());
-                            String s1 = result.getRetData().toString();
-                            UserBean user = new Gson().fromJson(s1, UserBean.class);
-                            UserDao dao = new UserDao(mContext);
-                            boolean isSuccess = dao.savaUser(user);
-                            if (isSuccess) {
-                                SharedPerfenceUtils.getInstance(mContext).saveuser(user.getMuserName());
-                                L.e("Login:"+user.getMuserName());
-                                FuLiCenterApplication.getInstance().setUserBean(user);
-                                L.e("Login:FuLiCenterApplication"+user.toString());
-                                CommonUtils.showShortToast("登录成功");
-                            } else {
-                                CommonUtils.showLongToast("user_database_error");
-                            }
-                            MFGT.finish(Login.this);
-
+                    public void onSuccess(String s) {
+                        Result result = ResultUtils.getResultFromJson(s, UserBean.class);
+                        if (result == null) {
+                            CommonUtils.showLongToast("登录失败");
                         } else {
-                            CommonUtils.showShortToast("登录失败");
-                            pb.dismiss();
-                            return;
+                            if (result.isRetMsg()) {
+                                UserBean user = (UserBean) result.getRetData();
+                                UserDao dao = new UserDao(mContext);
+                                dao.savaUser(user);
+                                boolean isSuccess =dao.savaUser(user);
+                                if (isSuccess){
+                                    FuLiCenterApplication.getInstance().setUserBean(user);
+                                    MFGT.finish(mContext);
+                                }else {
+                                        CommonUtils.showLongToast("user_database_error");
+                                }
+
+                                L.e("user" + user);
+                                MFGT.finish(mContext);
+                            } else {
+                                if (result.getRetCode() == I.MSG_LOGIN_UNKNOW_USER) {
+                                    CommonUtils.showLongToast("login_fail_unknown_user");
+                                } else if (result.getRetCode() == I.MSG_LOGIN_ERROR_PASSWORD) {
+                                    CommonUtils.showLongToast("login_fail_error_password");
+                                } else {
+                                    CommonUtils.showLongToast("login_fail");
+                                }
+                            }
                         }
+                        pb.dismiss();
                     }
 
                     @Override
                     public void onError(String error) {
-                        L.e("Login:"+error);
+                        L.e("Login:" + error);
+                        pb.dismiss();
                     }
                 });
                 break;
@@ -106,11 +114,4 @@ public class Login extends AppCompatActivity {
         super.onDestroy();
         MFGT.finish(mContext);
     }
-    /*    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-         if(requestCode==1&&resultCode==RESULT_OK){
-             EditText.
-         }
-    }*/
 }

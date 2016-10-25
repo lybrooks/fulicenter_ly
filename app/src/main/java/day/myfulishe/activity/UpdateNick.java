@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Display;
 import android.widget.EditText;
 
 import com.google.gson.Gson;
@@ -20,6 +21,7 @@ import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
+import cn.ucai.fulicenter.utils.ResultUtils;
 import cn.ucai.fulicenter.utils.SharedPerfenceUtils;
 import day.myfulishe.R;
 
@@ -32,6 +34,7 @@ public class UpdateNick extends AppCompatActivity {
     String usernick;
 
     UpdateNick mContext;
+    UserBean userBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +47,13 @@ public class UpdateNick extends AppCompatActivity {
     }
 
     private void initView() {
-        muserName = FuLiCenterApplication.getUserBean().getMuserName();
-        usernick = FuLiCenterApplication.getUserBean().getMuserNick();
+        userBean = FuLiCenterApplication.getUserBean();
+        if (userBean != null) {
+            muserName = userBean.getMuserName();
+            usernick = userBean.getMuserNick();
+        } else {
+            finish();
+        }
     }
 
     private void initData() {
@@ -54,16 +62,36 @@ public class UpdateNick extends AppCompatActivity {
 
     @OnClick(R.id.btn_save)
     public void onClick() {
-        usernick =etNick.getText().toString();
+
+        if (userBean != null) {
+            usernick = etNick.getText().toString();
+            if (usernick == null) {
+                CommonUtils.showLongToast("昵称不能为空");
+                return;
+            }else {
+                if (usernick.equals(userBean.getMuserNick())) {
+                    CommonUtils.showLongToast("未作出任何修改");
+                    return;
+                }
+                else {
+                    updateNick(usernick);
+                    return;
+                }
+            }
+        }
+
+    }
+
+    private void updateNick(String usernick) {
         final ProgressDialog pd = new ProgressDialog(mContext);
-        NetDao.updateNick(mContext, muserName, usernick, new OkHttpUtils.OnCompleteListener<Result>() {
+        NetDao.updateNick(mContext, muserName, usernick, new OkHttpUtils.OnCompleteListener<String>() {
                     @Override
-                    public void onSuccess(Result result) {
+                    public void onSuccess(String s) {
+                       Result result = ResultUtils.getResultFromJson(s,Result.class);
                         if (result != null && result.getRetCode() == 0) {
                             pd.dismiss();
                             L.e(result.toString());
-                            String s1 = result.getRetData().toString();
-                            UserBean user = new Gson().fromJson(s1, UserBean.class);
+                            UserBean user = (UserBean) result.getRetData();
                             UserDao dao = new UserDao(mContext);
                             boolean isSuccess = dao.update(user);
                             if (isSuccess) {
@@ -84,11 +112,9 @@ public class UpdateNick extends AppCompatActivity {
 
                     @Override
                     public void onError(String error) {
-
+                        CommonUtils.showLongToast("Update:" + error);
                     }
                 }
-
         );
-
     }
 }
