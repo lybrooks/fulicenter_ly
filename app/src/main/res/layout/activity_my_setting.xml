@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,9 +7,10 @@
     tools:context="day.myfulishe.activity.MySetting">
 
     <RelativeLayout
+        android:id="@+id/person_back"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/bottom_bar_normal_bg">
+        android:layout_height="wrap_content">
+
 
         <ImageView
             android:id="@+id/iv_back"
@@ -18,35 +19,136 @@
             android:src="@mipmap/back_nomal" />
 
         <TextView
+            android:id="@+id/tv_Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:gravity="center_horizontal"
-            android:text="设置"
+            android:text="个人资料"
             android:textSize="30dp" />
+
+        <View
+            style="@style/style_divide_line"
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:layout_below="@+id/tv_Title" />
     </RelativeLayout>
 
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/text_avatar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="新消息提醒"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/person_back"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:text="个人头像"
         android:textSize="22dp" />
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/iv_User_avatar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/person_back"
+        android:layout_marginRight="20dp"
+        android:src="@mipmap/user_avatar" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="140dp"
+        android:layout_toRightOf="@+id/iv_User_avatar"
+        android:src="@mipmap/arrow2_right" />
+
+    <View
+        style="@style/style_divide_line"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="1dp"
+        android:layout_below="@+id/iv_User_avatar" />
+
+    <LinearLayout
+        android:id="@+id/LL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_User_avatar"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="接收新消息通知"
-            android:textSize="25dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:text="用户名"
+            android:textSize="22dp" />
+
+        <TextView
+            android:id="@+id/tv_Username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="80dp"
+            android:text="帐号信息"
+            android:textSize="18dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="140dp"
+            android:src="@mipmap/arrow2_right"
+            android:id="@+id/iv_update_name"
             />
-          <ImageView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:src="@drawable/selector_menu_item_cart"/>
     </LinearLayout>
 
-</LinearLayout>
+    <View
+        style="@style/style_divide_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/LL" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/LL"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:text="昵称"
+            android:textSize="22dp" />
+
+        <TextView
+            android:id="@+id/tv_UserNick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="80dp"
+            android:text="昵称"
+            android:textSize="18dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="140dp"
+            android:src="@mipmap/arrow2_right"
+            android:id="@+id/iv_update_nick"
+            />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/bt_Quit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/main_orange"
+        android:text="退出"
+        android:textSize="25dp" />
+
+
+</RelativeLayout>
