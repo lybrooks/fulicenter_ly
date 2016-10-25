@@ -1,14 +1,22 @@
 package day.myfulishe.activity;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import cn.ucai.fulicenter.bean.UserBean;
 import cn.ucai.fulicenter.utils.ImageLoader;
+import cn.ucai.fulicenter.utils.MFGT;
+import cn.ucai.fulicenter.utils.SharedPerfenceUtils;
 import day.myfulishe.R;
 
 public class MySetting extends AppCompatActivity {
@@ -27,6 +35,7 @@ public class MySetting extends AppCompatActivity {
     Button btQuit;
 
     MySetting mContext;
+    UserBean userBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +47,41 @@ public class MySetting extends AppCompatActivity {
     }
 
     private void initView() {
-        String muserName = FuLiCenterApplication.getUserBean().getMuserName();
-        tvUsername.setText(muserName);
-        String muserNick = FuLiCenterApplication.getUserBean().getMuserNick();
-        tvUserNick.setText(muserNick);
-        ImageLoader.setAcatar(ImageLoader.getAcatarUrl(FuLiCenterApplication.getUserBean()), mContext, ivUserAvatar);
+        userBean = FuLiCenterApplication.getUserBean();
+        if (userBean != null) {
+            tvUsername.setText(userBean.getMuserName());
+            tvUserNick.setText(userBean.getMuserNick());
+            ImageLoader.setAcatar(ImageLoader.getAcatarUrl(userBean), mContext, ivUserAvatar);
+        } else {
+            finish();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initView();
+    }
+
+    @OnClick({R.id.RL_UserAvatar, R.id.LL_UpdateUsername, R.id.LL_UpdateNick, R.id.bt_Quit})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.RL_UserAvatar:
+                break;
+            case R.id.LL_UpdateUsername:
+                break;
+            case R.id.LL_UpdateNick:
+                MFGT.goUpdateNick(mContext);
+
+                break;
+            case R.id.bt_Quit:
+                if (userBean != null) {
+                    SharedPerfenceUtils.getInstance(mContext).removeUser();
+                    FuLiCenterApplication.getInstance().setUsernane(null);
+                    MFGT.gotoLogin(mContext);
+                }
+                finish();
+                break;
+        }
     }
 }

@@ -71,7 +71,9 @@ public class Login extends AppCompatActivity {
                             boolean isSuccess = dao.savaUser(user);
                             if (isSuccess) {
                                 SharedPerfenceUtils.getInstance(mContext).saveuser(user.getMuserName());
+                                L.e("Login:"+user.getMuserName());
                                 FuLiCenterApplication.getInstance().setUserBean(user);
+                                L.e("Login:FuLiCenterApplication"+user.toString());
                                 CommonUtils.showShortToast("登录成功");
                             } else {
                                 CommonUtils.showLongToast("user_database_error");
@@ -80,6 +82,7 @@ public class Login extends AppCompatActivity {
 
                         } else {
                             CommonUtils.showShortToast("登录失败");
+                            pb.dismiss();
                             return;
                         }
                     }

@@ -13,7 +13,9 @@ import day.myfulishe.activity.Deails;
 import day.myfulishe.activity.Login;
 import day.myfulishe.activity.MainActivity;
 import day.myfulishe.R;
+import day.myfulishe.activity.MySetting;
 import day.myfulishe.activity.Regist;
+import day.myfulishe.activity.UpdateNick;
 
 
 public class MFGT {
@@ -61,8 +63,8 @@ public class MFGT {
     }
 
     public static void gotoRegister(Activity context) {
-       // Intent intent = new Intent(context, Regist.class);
-       // startActivityForResult(context,intent,I.REQUEST_CODE_REGISTER);
+        // Intent intent = new Intent(context, Regist.class);
+        // startActivityForResult(context,intent,I.REQUEST_CODE_REGISTER);
     }
 
 
@@ -75,5 +77,16 @@ public class MFGT {
     private static void startActivityForResult(Activity mContext, Intent intent, int requestCode) {
         mContext.startActivityForResult(intent, requestCode);
         mContext.overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+    }
+
+    public static void goSettingActivity(Activity mContext) {
+        Intent intent = new Intent();
+        intent.setClass(mContext, MySetting.class);
+        startActivity(mContext, intent);
+
+    }
+
+    public static void goUpdateNick(Activity mContext) {
+        startActivity(mContext, UpdateNick.class);
     }
 }

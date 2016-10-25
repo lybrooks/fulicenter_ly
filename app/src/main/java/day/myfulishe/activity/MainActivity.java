@@ -153,19 +153,15 @@ public class MainActivity extends AppCompatActivity {
                 } else
                     index = 4;
 
-        break;
+                break;
+        }
+        setRadioButtonStatus();
+        setViewPage();
     }
-    setRadioButtonStatus();
-    setViewPage();
-}
 
     private void setViewPage() {
         for (int i = 0; i < mrb.length; i++) {
             if (i == index) {
-//                if (i == mrb.length - 1 && FuLiCenterApplication.getUserBean() == null) {
-//                    MFGT.startActivity(this, Login.class);
-//                    return;
-//                }
                 mVP.setCurrentItem(i);
             }
         }
@@ -186,40 +182,43 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (index == 4 && FuLiCenterApplication.getUserBean() == null) {
+            index = 0;
+        }
         setViewPage();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode== I.REQUEST_CODE_LOGIN&&FuLiCenterApplication.getUserBean()!=null){
-            index =4;
+        if (requestCode == I.REQUEST_CODE_LOGIN && FuLiCenterApplication.getUserBean() != null) {
+            index = 4;
         }
 
     }
 
     class MyViewPage extends FragmentPagerAdapter {
-    ArrayList<Fragment> arrayList;
+        ArrayList<Fragment> arrayList;
 
-    public MyViewPage(FragmentManager fm, ArrayList<Fragment> arrayList) {
-        super(fm);
-        this.arrayList = arrayList;
-    }
+        public MyViewPage(FragmentManager fm, ArrayList<Fragment> arrayList) {
+            super(fm);
+            this.arrayList = arrayList;
+        }
 
-    @Override
-    public Fragment getItem(int position) {
-        return fragmentArrayList.get(position);
-    }
+        @Override
+        public Fragment getItem(int position) {
+            return fragmentArrayList.get(position);
+        }
 
-    @Override
-    public int getCount() {
-        return fragmentArrayList.size();
-    }
+        @Override
+        public int getCount() {
+            return fragmentArrayList.size();
+        }
 
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        getSupportFragmentManager().beginTransaction().hide(fragmentArrayList.get(position));
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            getSupportFragmentManager().beginTransaction().hide(fragmentArrayList.get(position));
+        }
     }
-}
 
 }

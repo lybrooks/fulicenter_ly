@@ -24,7 +24,8 @@
         <activity android:name=".activity.CategoryDetails" />
         <activity android:name=".activity.Regist" />
         <activity android:name=".activity.Login" />
-        <activity android:name=".activity.MySetting"></activity>
+        <activity android:name=".activity.MySetting" />
+        <activity android:name=".activity.UpdateNick"></activity>
     </application>
 
 </manifest>
