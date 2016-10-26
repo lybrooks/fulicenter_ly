@@ -37,7 +37,6 @@ public class Collections extends AppCompatActivity {
     TextView tvRefresh;
     @Bind(R.id.srl)
     SwipeRefreshLayout srl;
-
     Collections mContext;
     UserBean userBean;
 
@@ -77,11 +76,12 @@ public class Collections extends AppCompatActivity {
             public void onSuccess(CollectBean[] result) {
                 srl.setRefreshing(false);
                 tvRefresh.setVisibility(View.GONE);
-                if (result != null && result.length > 0 && mAdapter.isMore) {
+                if (result != null && result.length >= 0 && mAdapter.isMore) {
                     ArrayList<CollectBean> list = ConvertUtils.array2List(result);
                     switch (action) {
                         case I.ACTION_DOWNLOAD:
                             mAdapter.setFooter("加载更多数据");
+                            L.e("liseSize"+list.size());
                             mAdapter.inintContact(list);
                             break;
                         case I.ACTION_PULL_DOWN:
@@ -154,5 +154,12 @@ public class Collections extends AppCompatActivity {
     @OnClick(R.id.iv_back)
     public void onClick() {
         MFGT.finish(mContext);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        L.e("onResume");
+        initData(I.ACTION_DOWNLOAD, PageId);
     }
 }

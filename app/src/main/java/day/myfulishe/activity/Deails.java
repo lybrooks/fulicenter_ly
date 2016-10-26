@@ -146,7 +146,6 @@ public class Deails extends AppCompatActivity {
                 updateGoodsCollectStatus();
                 CommonUtils.showLongToast("添加收藏成功");
             }
-
             @Override
             public void onError(String error) {
                 CommonUtils.showLongToast("添加收藏失败");
@@ -165,7 +164,6 @@ public class Deails extends AppCompatActivity {
                 }
                 updateGoodsCollectStatus();
             }
-
             @Override
             public void onError(String error) {
 

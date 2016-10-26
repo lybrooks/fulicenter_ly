@@ -42,8 +42,8 @@
 
         <ImageView
             android:id="@+id/iv_personal_avatar"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
             android:layout_gravity="center_vertical"
             android:layout_margin="15sp"
             android:src="@mipmap/user_avatar" />
@@ -71,20 +71,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/google_red"
-        android:orientation="horizontal">-
+        android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:id="@+id/RL_CollectCounts"
+            >
 
             <TextView
                 android:id="@+id/tv_personal_countOfCollections"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:text="2"
+                android:text="20"
                 android:textColor="#fff"
                 android:textSize="16sp" />
 
