@@ -53,14 +53,6 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initView();
         initFragment();
-//        int intExtra = getIntent().getIntExtra("index", 0);
-//        L.i("index:" + intExtra + "");
-//        if (intExtra != 0) {
-//            index = intExtra;
-//            mVP.setCurrentItem(index);
-//            MFGT.finish(MainActivity.this);
-//        }
-
     }
 
     private void initFragment() {

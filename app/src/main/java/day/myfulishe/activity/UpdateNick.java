@@ -68,12 +68,11 @@ public class UpdateNick extends AppCompatActivity {
             if (usernick == null) {
                 CommonUtils.showLongToast("昵称不能为空");
                 return;
-            }else {
+            } else {
                 if (usernick.equals(userBean.getMuserNick())) {
                     CommonUtils.showLongToast("未作出任何修改");
                     return;
-                }
-                else {
+                } else {
                     updateNick(usernick);
                     return;
                 }
@@ -84,30 +83,39 @@ public class UpdateNick extends AppCompatActivity {
 
     private void updateNick(String usernick) {
         final ProgressDialog pd = new ProgressDialog(mContext);
+        pd.show();
         NetDao.updateNick(mContext, muserName, usernick, new OkHttpUtils.OnCompleteListener<String>() {
                     @Override
                     public void onSuccess(String s) {
-                       Result result = ResultUtils.getResultFromJson(s,UserBean.class);
-                        if (result != null ) {
-                            pd.dismiss();
-                            L.e(result.toString());
-                            UserBean user = (UserBean) result.getRetData();
-                            UserDao dao = new UserDao(mContext);
-                            boolean isSuccess = dao.update(user);
-                            if (isSuccess) {
-                                SharedPerfenceUtils.getInstance(mContext).saveuser(user.getMuserName());
-                                L.e("Update:" + user.getMuserName());
-                                FuLiCenterApplication.getInstance().setUserBean(user);
-                                L.e("Update:FuLiCenterApplication" + user.toString());
-                                CommonUtils.showShortToast("修改昵称成功");
-                            } else {
-                                CommonUtils.showLongToast("user_database_error");
-                            }
+                        Result result = ResultUtils.getResultFromJson(s, UserBean.class);
+                        L.e("UpdateNick:"+result.toString());
+                        if (result == null) {
+                            CommonUtils.showLongToast("修改昵称失败");
                         } else {
-                            CommonUtils.showShortToast("修改昵称失败");
-                            pd.dismiss();
+                            if (result.isRetMsg()) {
+                                L.e(result.toString());
+                                UserBean U = (UserBean) result.getRetData();
+                                UserDao dao = new UserDao(mContext);
+                                boolean isSuccess = dao.update(U);
+                                if (isSuccess) {
+                                    FuLiCenterApplication.getInstance().setUserBean(U);
+                                    L.e("Update:FuLiCenterApplication" + U.toString());
+                                    CommonUtils.showShortToast("修改昵称成功");
+                                    MFGT.finish(mContext);
+                                } else {
+                                    if (result.getRetCode() == I.MSG_USER_SAME_NICK) {
+                                        CommonUtils.showLongToast("update_fail");
+                                    } else if (result.getRetCode() == I.MSG_USER_UPDATE_NICK_FAIL) {
+                                        CommonUtils.showLongToast("update_fail");
+                                    } else {
+                                        CommonUtils.showLongToast("update_fail");
+                                    }
+                                }
+
+                            }
+
                         }
-                        MFGT.finish(mContext);
+                        pd.dismiss();
                     }
 
                     @Override

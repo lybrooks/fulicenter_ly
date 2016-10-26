@@ -60,12 +60,11 @@ public class MySetting extends AppCompatActivity {
 
     private void initView() {
         userBean = FuLiCenterApplication.getUserBean();
-        if (userBean != null) {
-            tvUsername.setText(userBean.getMuserName());
-            tvUserNick.setText(userBean.getMuserNick());
-            ImageLoader.setAcatar(ImageLoader.getAcatarUrl(userBean), mContext, ivUserAvatar);
-        } else {
+        if (userBean == null) {
             finish();
+            return;
+        } else {
+            showInfo();
         }
     }
 
@@ -77,6 +76,9 @@ public class MySetting extends AppCompatActivity {
 
     private void showInfo() {
         userBean = FuLiCenterApplication.getUserBean();
+        tvUsername.setText(userBean.getMuserName());
+        tvUserNick.setText(userBean.getMuserNick());
+        ImageLoader.setAcatar(ImageLoader.getAcatarUrl(userBean), mContext, ivUserAvatar);
     }
 
     @Override
@@ -85,8 +87,8 @@ public class MySetting extends AppCompatActivity {
         if (resultCode != RESULT_OK) {
             return;
         }
-        setAvatarListener.setAvatar(requestCode, data, ivUserAvatar);
-        if (requestCode == RESULT_OK && requestCode == I.REQUEST_CODE_NICK) {
+        setAvatarListener.setAvatar(requestCode,data,ivUserAvatar);
+        if (resultCode == RESULT_OK && requestCode == I.REQUEST_CODE_NICK) {
             CommonUtils.showLongToast("update_user_nick_success");
         }
         if (requestCode == OnSetAvatarListener.REQUEST_CROP_PHOTO) {
@@ -95,10 +97,8 @@ public class MySetting extends AppCompatActivity {
     }
 
     private void updateAavatar() {
-        File file = new File(OnSetAvatarListener.getAvatarPath(mContext,
-                OnSetAvatarListener.getAvatarPath(mContext, userBean.getMavatarPath() + "/" + userBean.getMuserName()
-                        + I.AVATAR_SUFFIX_JPG)
-        ));
+        File file = new File(OnSetAvatarListener.getAvatarPath(mContext,userBean.getMavatarPath() + "/" + userBean.getMuserName()
+                        + I.AVATAR_SUFFIX_JPG));
         final ProgressDialog pd = new ProgressDialog(mContext);
         L.e("file" + file.exists());
         L.e("file" + file.getAbsolutePath());
@@ -107,6 +107,7 @@ public class MySetting extends AppCompatActivity {
             @Override
             public void onSuccess(String s) {
                 Result result = ResultUtils.getResultFromJson(s, UserBean.class);
+                L.e("UpdateAvatar:"+result.toString());
                 if (result == null) {
                     CommonUtils.showLongToast("上传用户头像失败");
                 } else {
