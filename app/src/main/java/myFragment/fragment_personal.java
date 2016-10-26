@@ -11,9 +11,16 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.ucai.fulicenter.bean.MessageBean;
+import cn.ucai.fulicenter.bean.Result;
 import cn.ucai.fulicenter.bean.UserBean;
+import cn.ucai.fulicenter.dao.UserDao;
+import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.ImageLoader;
+import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.MFGT;
+import cn.ucai.fulicenter.utils.OkHttpUtils;
+import cn.ucai.fulicenter.utils.ResultUtils;
 import day.myfulishe.R;
 import day.myfulishe.activity.FuLiCenterApplication;
 import day.myfulishe.activity.MainActivity;
@@ -28,6 +35,8 @@ public class Fragment_personal extends Fragment {
 
     MainActivity mContext;
     UserBean userBean;
+    @Bind(R.id.tv_personal_countOfCollections)
+    TextView tvPersonalCountOfCollections;
 
     public Fragment_personal() {
     }
@@ -53,6 +62,51 @@ public class Fragment_personal extends Fragment {
         }
     }
 
+    public void downCollectCounts() {
+        NetDao.downloadCollecCounts(mContext, userBean.getMuserName(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
+            @Override
+            public void onSuccess(MessageBean result) {
+                if (result.getMsg() == null && !result.isSuccess()) {
+                    tvPersonalCountOfCollections.setText(String.valueOf(0));
+                } else {
+                    tvPersonalCountOfCollections.setText(String.valueOf(result.getMsg()));
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+    }
+
+    public void updateUserMessages() {
+        NetDao.findUserByUserName(mContext, userBean.getMuserName(), new OkHttpUtils.OnCompleteListener<String>() {
+            @Override
+            public void onSuccess(String s) {
+                Result result = ResultUtils.getResultFromJson(s, UserBean.class);
+                if(result!=null){
+                    UserBean U = (UserBean) result.getRetData();
+                    if(userBean.equals(U)){
+                        UserDao dao = new UserDao(mContext);
+                        boolean b=dao.savaUser(U);
+                        if(b){
+                            FuLiCenterApplication.getInstance().setUserBean(U);
+                            userBean=U;
+                            ImageLoader.setAcatar(ImageLoader.getAcatarUrl(userBean),mContext,ivPersonalAvatar);
+                            tvPersonalUserName.setText(userBean.getMuserNick());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+
+            }
+        });
+    }
+
 
     @Override
     public void onDestroyView() {
@@ -65,12 +119,22 @@ public class Fragment_personal extends Fragment {
         MFGT.goSettingActivity(getActivity());
     }
 
+    @OnClick(R.id.RL_CollectCounts)
+    public  void goCollection(){
+        MFGT.gotoCollection(mContext);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
+        userBean = FuLiCenterApplication.getUserBean();
         if (userBean != null) {
             ImageLoader.setAcatar(ImageLoader.getAcatarUrl(userBean), mContext, ivPersonalAvatar);
             tvPersonalUserName.setText(userBean.getMuserNick());
+            L.e("personal:"+userBean.getMuserNick());
+            downCollectCounts();
+            updateUserMessages();
         }
     }
+
 }
