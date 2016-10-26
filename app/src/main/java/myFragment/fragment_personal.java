@@ -66,16 +66,16 @@ public class Fragment_personal extends Fragment {
         NetDao.downloadCollecCounts(mContext, userBean.getMuserName(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
             @Override
             public void onSuccess(MessageBean result) {
-                if (result.getMsg() == null && !result.isSuccess()) {
-                    tvPersonalCountOfCollections.setText(String.valueOf(0));
+                if (result.isSuccess()) {
+                    tvPersonalCountOfCollections.setText(result.getMsg());
                 } else {
-                    tvPersonalCountOfCollections.setText(String.valueOf(result.getMsg()));
+                    tvPersonalCountOfCollections.setText(String.valueOf(0));
                 }
             }
 
             @Override
             public void onError(String error) {
-
+                tvPersonalCountOfCollections.setText(String.valueOf(0));
             }
         });
     }
@@ -85,15 +85,15 @@ public class Fragment_personal extends Fragment {
             @Override
             public void onSuccess(String s) {
                 Result result = ResultUtils.getResultFromJson(s, UserBean.class);
-                if(result!=null){
+                if (result != null) {
                     UserBean U = (UserBean) result.getRetData();
-                    if(userBean.equals(U)){
+                    if (!userBean.equals(U)) {
                         UserDao dao = new UserDao(mContext);
-                        boolean b=dao.savaUser(U);
-                        if(b){
+                        boolean b = dao.savaUser(U);
+                        if (b) {
                             FuLiCenterApplication.getInstance().setUserBean(U);
-                            userBean=U;
-                            ImageLoader.setAcatar(ImageLoader.getAcatarUrl(userBean),mContext,ivPersonalAvatar);
+                            userBean = U;
+                            ImageLoader.setAcatar(ImageLoader.getAcatarUrl(userBean), mContext, ivPersonalAvatar);
                             tvPersonalUserName.setText(userBean.getMuserNick());
                         }
                     }
@@ -120,7 +120,7 @@ public class Fragment_personal extends Fragment {
     }
 
     @OnClick(R.id.RL_CollectCounts)
-    public  void goCollection(){
+    public void goCollection() {
         MFGT.gotoCollection(mContext);
     }
 
@@ -131,7 +131,7 @@ public class Fragment_personal extends Fragment {
         if (userBean != null) {
             ImageLoader.setAcatar(ImageLoader.getAcatarUrl(userBean), mContext, ivPersonalAvatar);
             tvPersonalUserName.setText(userBean.getMuserNick());
-            L.e("personal:"+userBean.getMuserNick());
+            L.e("personal:" + userBean.getMuserNick());
             downCollectCounts();
             updateUserMessages();
         }

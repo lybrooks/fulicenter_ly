@@ -14,8 +14,14 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.bean.CollectBean;
+import cn.ucai.fulicenter.bean.MessageBean;
+import cn.ucai.fulicenter.net.NetDao;
+import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.ImageLoader;
+import cn.ucai.fulicenter.utils.L;
+import cn.ucai.fulicenter.utils.OkHttpUtils;
 import day.myfulishe.R;
+import day.myfulishe.activity.FuLiCenterApplication;
 
 /**
  * Created by Administrator on 2016/10/18.
@@ -78,6 +84,12 @@ public class CollectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         notifyDataSetChanged();
     }
 
+    private void deleteData(CollectBean goodsBean) {
+        this.contactList.remove(goodsBean);
+        L.e("Collect,remove:"+goodsBean.getGoodsName());
+        notifyDataSetChanged();
+    }
+
     public void setFooter(String footertext) {
         this.footertext = footertext;
         notifyDataSetChanged();
@@ -110,7 +122,7 @@ public class CollectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             return;
         }
         ContactViewHolder contactViewHolder = (ContactViewHolder) holder;
-        CollectBean goodsBean = contactList.get(position);
+        final CollectBean goodsBean = contactList.get(position);
         contactViewHolder.tvGoodPrize.setText(goodsBean.getGoodsName());
         ImageLoader.build(I.DOWNLOAD_IMG_URL + goodsBean.getGoodsThumb())
                 .height(200)
@@ -118,7 +130,32 @@ public class CollectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 .imageView(contactViewHolder.ivGoodsImg)
                 .listener(parent)
                 .showImage(context);
+        contactViewHolder.iv_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteCollected(goodsBean);
+            }
+        });
     }
+
+    private void deleteCollected(final CollectBean goodsBean) {
+        NetDao.deleteCollect(context, goodsBean.getGoodsId(), FuLiCenterApplication.getUserBean().getMuserName(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
+            @Override
+            public void onSuccess(MessageBean result) {
+                if (result.isSuccess()) {
+                    deleteData(goodsBean);
+                    CommonUtils.showLongToast("删除收藏成功");
+                }else {
+                    CommonUtils.showLongToast("您的收藏夹为空");
+                }
+            }
+            @Override
+            public void onError(String error) {
+                CommonUtils.showLongToast("删除收藏成功");
+            }
+        });
+    }
+
 
     @Override
     public int getItemCount() {
@@ -150,16 +187,20 @@ public class CollectAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
 
-    static class ContactViewHolder   extends RecyclerView.ViewHolder{
+    static class ContactViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.iv_goods_img)
         ImageView ivGoodsImg;
         @Bind(R.id.tv_good_prize)
         TextView tvGoodPrize;
 
+        ImageView iv_delete;
         MyOnClickListener MyOnClick;
-        ContactViewHolder(View view,final MyOnClickListener MyonClick) {
+
+        ContactViewHolder(View view, final MyOnClickListener MyonClick) {
             super(view);
             ButterKnife.bind(this, view);
+            iv_delete = (ImageView) view.findViewById(R.id.iv_delete);
+
             this.MyOnClick = MyonClick;
             view.setOnClickListener(new View.OnClickListener() {
                 @Override

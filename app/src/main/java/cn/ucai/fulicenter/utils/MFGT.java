@@ -9,6 +9,7 @@ import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.bean.CategoryChildBean;
 import day.myfulishe.activity.Boutique;
 import day.myfulishe.activity.CategoryDetails;
+import day.myfulishe.activity.Collections;
 import day.myfulishe.activity.Deails;
 import day.myfulishe.activity.Login;
 import day.myfulishe.activity.MainActivity;
@@ -88,6 +89,10 @@ public class MFGT {
 
     public static void goUpdateNick(Activity mContext) {
 
-        startActivityForResult(mContext,new Intent(mContext,UpdateNick.class),I.REQUEST_CODE_NICK);
+        startActivityForResult(mContext, new Intent(mContext, UpdateNick.class), I.REQUEST_CODE_NICK);
+    }
+
+    public static void gotoCollection(Activity comtext) {
+        startActivity(comtext, Collections.class);
     }
 }
