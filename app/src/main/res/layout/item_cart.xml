@@ -18,6 +18,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
             android:background="@mipmap/checkbox_normal"
+            android:button="@drawable/checkbox_style"
             />
 
         <ImageView

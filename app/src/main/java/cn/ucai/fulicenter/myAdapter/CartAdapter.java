@@ -1,10 +1,13 @@
 package cn.ucai.fulicenter.myAdapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -77,15 +80,13 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     public void inintContact(ArrayList<CartBean> list) {
-
+        if (contactList != null) {
+            contactList.clear();
+        }
         this.contactList = list;
         notifyDataSetChanged();
     }
 
-    public void setFooter(String footertext) {
-        this.footertext = footertext;
-        notifyDataSetChanged();
-    }
 
     int count;
 
@@ -115,25 +116,27 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             footerViewHolder.tvItemFooter.setText(footertext);
             return;
         }
+        final ContactViewHolder contactViewHolder = (ContactViewHolder) holder;
         final CartBean goodsBean = contactList.get(position);
-        if (goodsBean == null) {
-            return;
-        } else {
-            final ContactViewHolder contactViewHolder = (ContactViewHolder) holder;
-            GoodsDetailsBean goods = goodsBean.getGoods();
-            if (goods == null) {
-                return;
-            } else {
-                count = goodsBean.getCount();
-                contactViewHolder.tvGoodCount.setText("(" + count + ")");
-                String s = goods.getCurrencyPrice().substring(goods.getCurrencyPrice().indexOf("￥") + 1);
-                final int Money = Integer.parseInt(s);
-                contactViewHolder.tvGoodPrize.setText("￥" + Money * count);
-                contactViewHolder.tvGoodName.setText(goods.getGoodsName());
-                ImageLoader.downloadImg(context, contactViewHolder.ivGoodsImg, goods.getGoodsThumb());
-                addCarts(contactViewHolder, Money);
-                deteleCarts(goodsBean, contactViewHolder, Money);
-            }
+        GoodsDetailsBean goods = goodsBean.getGoods();
+        if (goodsBean != null) {
+            count = goodsBean.getCount();
+            contactViewHolder.tvGoodCount.setText("(" + count + ")");
+            String s = goods.getCurrencyPrice().substring(goods.getCurrencyPrice().indexOf("￥") + 1);
+            final int Money = Integer.parseInt(s);
+            contactViewHolder.tvGoodPrize.setText("￥" + Money * count);
+            contactViewHolder.tvGoodName.setText(goods.getGoodsName());
+            ImageLoader.downloadImg(context, contactViewHolder.ivGoodsImg, goods.getGoodsThumb());
+            addCarts(contactViewHolder, Money);
+            deteleCarts(goodsBean, contactViewHolder, Money);
+            contactViewHolder.mCbCartSelested.setChecked(false);
+            contactViewHolder.mCbCartSelested.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    goodsBean.setChecked(isChecked);
+                    getContext().sendBroadcast(new Intent(I.BROADCAST_UPDATE_CART));
+                }
+            });
         }
     }
 
@@ -152,6 +155,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
         });
     }
+
     private void addCarts(final ContactViewHolder contactViewHolder, final int money) {
         contactViewHolder.ivAddcart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,6 +166,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             }
         });
     }
+
     private void deteleCar(CartBean goodsBean) {
         NetDao.deleteCart(getContext(), goodsBean.getId(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
             @Override
@@ -170,6 +175,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     CommonUtils.showShortToast("删除成功");
                 }
             }
+
             @Override
             public void onError(String error) {
                 CommonUtils.showShortToast("删除失败");
@@ -197,7 +203,6 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
 
-
     static class FooterViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.tv_item_footer)
         TextView tvItemFooter;
@@ -222,6 +227,8 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ImageView ivDeleteCart;
         @Bind(R.id.tv_good_prize)
         TextView tvGoodPrize;
+        @Bind(R.id.cb_checkBox)
+        CheckBox mCbCartSelested;
 
         ContactViewHolder(View view) {
             super(view);

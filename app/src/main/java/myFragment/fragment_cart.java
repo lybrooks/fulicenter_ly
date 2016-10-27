@@ -1,5 +1,9 @@
 package myFragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,6 +20,7 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.bean.CartBean;
 import cn.ucai.fulicenter.bean.UserBean;
 import cn.ucai.fulicenter.myAdapter.CartAdapter;
@@ -45,6 +50,8 @@ public class Fragment_cart extends Fragment {
     TextView tvNothing;
     @Bind(R.id.fag_rlv_newgoods)
     RecyclerView fagRlvNewgoods;
+
+    updateCartReceiver mReceiver;
 
     public Fragment_cart() {
     }
@@ -78,6 +85,10 @@ public class Fragment_cart extends Fragment {
     }
 
     private void setListener() {
+        IntentFilter flter = new IntentFilter(I.BROADCAST_UPDATE_CART);
+        mReceiver = new updateCartReceiver();
+        getContext().registerReceiver(mReceiver, flter);
+
         srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -106,6 +117,7 @@ public class Fragment_cart extends Fragment {
                     tvRefresh.setVisibility(View.GONE);
                     srl.setRefreshing(false);
                     if (list != null && list.size() > 0) {
+                        cartBeanArrayList.addAll(list);
                         mAdapter.inintContact(list);
                         setCarLayout(true);
                     } else {
@@ -158,5 +170,20 @@ public class Fragment_cart extends Fragment {
     private int getPrice(String price) {
         price = price.substring(price.indexOf("￥") + 1);
         return Integer.valueOf(price);
+    }
+
+    class updateCartReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            sumPrice();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mReceiver != null) {
+            getContext().unregisterReceiver(mReceiver);
+        }
     }
 }
