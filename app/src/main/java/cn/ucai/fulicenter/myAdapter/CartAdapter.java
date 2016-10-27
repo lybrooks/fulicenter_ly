@@ -44,8 +44,8 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.context = context;
     }
 
-    Context context;
-    ArrayList<CartBean> contactList;
+    static Context context;
+    static ArrayList<CartBean> contactList;
 
     public ArrayList<CartBean> getContactList() {
         return contactList;
@@ -122,13 +122,10 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (goodsBean != null) {
             count = goodsBean.getCount();
             contactViewHolder.tvGoodCount.setText("(" + count + ")");
-            String s = goods.getCurrencyPrice().substring(goods.getCurrencyPrice().indexOf("￥") + 1);
-            final int Money = Integer.parseInt(s);
-            contactViewHolder.tvGoodPrize.setText("￥" + Money * count);
             contactViewHolder.tvGoodName.setText(goods.getGoodsName());
+            contactViewHolder.tvGoodPrize.setText(goods.getCurrencyPrice());
             ImageLoader.downloadImg(context, contactViewHolder.ivGoodsImg, goods.getGoodsThumb());
-            addCarts(contactViewHolder, Money);
-            deteleCarts(goodsBean, contactViewHolder, Money);
+            contactViewHolder.ivAddcart.setTag(position);
             contactViewHolder.mCbCartSelested.setChecked(false);
             contactViewHolder.mCbCartSelested.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -138,49 +135,6 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 }
             });
         }
-    }
-
-    private void deteleCarts(final CartBean goodsBean, final ContactViewHolder contactViewHolder, final int money) {
-        contactViewHolder.ivDeleteCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                count--;
-                contactViewHolder.tvGoodPrize.setText("￥" + count * money);
-                contactViewHolder.tvGoodCount.setText("(" + count + ")");
-                if (count == 0) {
-                    removethis(goodsBean);
-                    deteleCar(goodsBean);
-                    return;
-                }
-            }
-        });
-    }
-
-    private void addCarts(final ContactViewHolder contactViewHolder, final int money) {
-        contactViewHolder.ivAddcart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                count++;
-                contactViewHolder.tvGoodPrize.setText("￥" + count * money);
-                contactViewHolder.tvGoodCount.setText("(" + count + ")");
-            }
-        });
-    }
-
-    private void deteleCar(CartBean goodsBean) {
-        NetDao.deleteCart(getContext(), goodsBean.getId(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
-            @Override
-            public void onSuccess(MessageBean result) {
-                if (result.isSuccess()) {
-                    CommonUtils.showShortToast("删除成功");
-                }
-            }
-
-            @Override
-            public void onError(String error) {
-                CommonUtils.showShortToast("删除失败");
-            }
-        });
     }
 
     private void removethis(CartBean goodsBean) {
@@ -233,6 +187,75 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ContactViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+        }
+
+        @OnClick(R.id.iv_addcart)
+        public void addCart() {
+            int position = (int) ivAddcart.getTag();
+            final CartBean cartBean = contactList.get(position);
+            NetDao.updateCar(context, cartBean.getId(), cartBean.getCount() + 1, new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                @Override
+                public void onSuccess(MessageBean result) {
+                    if (result != null && result.isSuccess()) {
+                        cartBean.setCount(cartBean.getCount() + 1);
+                        context.sendBroadcast(new Intent(I.BROADCAST_UPDATE_CART));
+                        tvGoodCount.setText("(" + cartBean.getCount() + ")");
+                        tvGoodPrize.setText("￥" + cartBean.getCount() * getPrice(cartBean.getGoods().getCurrencyPrice()));
+
+                    }
+                }
+
+                @Override
+                public void onError(String error) {
+
+                }
+            });
+
+        }
+
+        private int getPrice(String price) {
+            price = price.substring(price.indexOf("￥") + 1);
+            return Integer.valueOf(price);
+        }
+
+        @OnClick(R.id.iv_deleteCart)
+        public void deleteCart() {
+            int position = (int) ivAddcart.getTag();
+            final CartBean cartBean = contactList.get(position);
+            if (cartBean.getCount() > 1) {
+                NetDao.updateCar(context, cartBean.getId(), cartBean.getCount() - 1, new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                    @Override
+                    public void onSuccess(MessageBean result) {
+                        if (result != null && result.isSuccess()) {
+                            cartBean.setCount(cartBean.getCount() - 1);
+                            context.sendBroadcast(new Intent(I.BROADCAST_UPDATE_CART));
+                            tvGoodCount.setText("(" + cartBean.getCount() + ")");
+                            tvGoodPrize.setText("￥" + cartBean.getCount() * getPrice(cartBean.getGoods().getCurrencyPrice()));
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
+            } else {
+                NetDao.deleteCart(context, cartBean.getId(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                    @Override
+                    public void onSuccess(MessageBean result) {
+                        if (result.isSuccess()) {
+                            CommonUtils.showShortToast("删除成功");
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        CommonUtils.showShortToast("删除失败");
+                    }
+                });
+
+            }
         }
 
 
