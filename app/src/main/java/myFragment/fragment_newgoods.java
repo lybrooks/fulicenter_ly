@@ -2,7 +2,6 @@ package myFragment;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,7 +18,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
-import cn.ucai.fulicenter.myAdapter.newAdapter;
+import cn.ucai.fulicenter.myAdapter.BoutiqueAdapter;
 import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.ConvertUtils;
 import cn.ucai.fulicenter.utils.MFGT;
@@ -33,7 +31,7 @@ import day.myfulishe.R;
 public class Fragment_newgoods extends Fragment {
     public GridLayoutManager layoutManger;
     ArrayList<NewGoodsBean> NewGoodsBeanlist;
-    public newAdapter mAdapter;
+    public BoutiqueAdapter mAdapter;
     public RecyclerView mrv;
 
     int mNewState;
@@ -62,7 +60,7 @@ public class Fragment_newgoods extends Fragment {
         srl = (SwipeRefreshLayout) view.findViewById(R.id.srl);
         mrv = (RecyclerView) view.findViewById(R.id.fag_rlv_newgoods);
         NewGoodsBeanlist = new ArrayList<>();
-        mAdapter = new newAdapter(getContext(), NewGoodsBeanlist);
+        mAdapter = new BoutiqueAdapter(getContext(), NewGoodsBeanlist);
         layoutManger = new GridLayoutManager(getContext(), I.COLUM_NUM, GridLayoutManager.VERTICAL, false);
         layoutManger.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -145,7 +143,7 @@ public class Fragment_newgoods extends Fragment {
             }
         });
 
-        mAdapter.setMyOnClick(new newAdapter.MyOnClickListener() {
+        mAdapter.setMyOnClick(new BoutiqueAdapter.MyOnClickListener() {
             @Override
             public void OnClick(View view, int position) {
                 int goodsId = mAdapter.contactList.get(position).getGoodsId();

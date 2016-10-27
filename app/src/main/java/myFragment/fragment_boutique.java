@@ -97,7 +97,6 @@ public class Fragment_boutique extends Fragment {
                             srl.setRefreshing(false);
                         }
                     }
-
                     @Override
                     public void onError(String error) {
                         srl.setRefreshing(false);

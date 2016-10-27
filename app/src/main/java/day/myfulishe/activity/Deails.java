@@ -48,16 +48,10 @@ public class Deails extends AppCompatActivity {
 
     Deails mComtext;
     UserBean user;
-    @Bind(R.id.iv_main_cart)
-    ImageView ivMainCart;
     @Bind(R.id.iv_collect)
     ImageView ivCollect;
-    @Bind(R.id.iv_share)
-    ImageView ivShare;
-    @Bind(R.id.LL)
-    RelativeLayout LL;
 
-    boolean isCollected = false;
+    boolean isCollected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +117,21 @@ public class Deails extends AppCompatActivity {
                 this.finish();
                 break;
             case R.id.iv_main_cart:
+                NetDao.addCar(mComtext, goodId, user.getMuserName(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                    @Override
+                    public void onSuccess(MessageBean result) {
+                        if (result.isSuccess()) {
+                            CommonUtils.showShortToast("添加成功");
+                        } else {
+                            CommonUtils.showShortToast("添加失败");
+                        }
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        CommonUtils.showShortToast("添加失败");
+                    }
+                });
                 break;
             case R.id.iv_collect:
                 if (isCollected) {
@@ -136,6 +145,7 @@ public class Deails extends AppCompatActivity {
                 break;
         }
     }
+
     private void showShare() {
         ShareSDK.initSDK(this);
         OnekeyShare oks = new OnekeyShare();
@@ -162,7 +172,6 @@ public class Deails extends AppCompatActivity {
         oks.setSite("ShareSDK");
         // siteUrl是分享此内容的网站地址，仅在QQ空间使用
         oks.setSiteUrl("http://sharesdk.cn");
-
 // 启动分享GUI
         oks.show(this);
     }
@@ -179,6 +188,7 @@ public class Deails extends AppCompatActivity {
                 updateGoodsCollectStatus();
                 CommonUtils.showLongToast("添加收藏成功");
             }
+
             @Override
             public void onError(String error) {
                 CommonUtils.showLongToast("添加收藏失败");
@@ -197,6 +207,7 @@ public class Deails extends AppCompatActivity {
                 }
                 updateGoodsCollectStatus();
             }
+
             @Override
             public void onError(String error) {
 
@@ -225,6 +236,7 @@ public class Deails extends AppCompatActivity {
                 }
                 updateGoodsCollectStatus();
             }
+
             @Override
             public void onError(String error) {
 

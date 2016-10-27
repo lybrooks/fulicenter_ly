@@ -52,14 +52,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         initView();
-        initFragment();
+        mrb[0].setChecked(true);
     }
-
-    private void initFragment() {
-
-
-    }
-
 
     private void initView() {
         mrb = new RadioButton[5];

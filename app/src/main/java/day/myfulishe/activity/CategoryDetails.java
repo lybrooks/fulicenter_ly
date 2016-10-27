@@ -21,7 +21,7 @@ import butterknife.OnClick;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.bean.CategoryChildBean;
 import cn.ucai.fulicenter.bean.NewGoodsBean;
-import cn.ucai.fulicenter.myAdapter.newAdapter;
+import cn.ucai.fulicenter.myAdapter.BoutiqueAdapter;
 import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.ConvertUtils;
 import cn.ucai.fulicenter.utils.L;
@@ -43,7 +43,7 @@ public class CategoryDetails extends AppCompatActivity {
 
     int mNewState;
     int PageId = 1;
-    public newAdapter mAdapter;
+    public BoutiqueAdapter mAdapter;
     public GridLayoutManager layoutManger;
     ArrayList<NewGoodsBean> NewGoodsBeanlist;
     int CartId;
@@ -118,7 +118,7 @@ public class CategoryDetails extends AppCompatActivity {
         });
 
 
-        mAdapter.setMyOnClick(new newAdapter.MyOnClickListener() {
+        mAdapter.setMyOnClick(new BoutiqueAdapter.MyOnClickListener() {
             @Override
             public void OnClick(View view, int position) {
                 int goodsId = mAdapter.contactList.get(position).getGoodsId();
@@ -162,7 +162,7 @@ public class CategoryDetails extends AppCompatActivity {
     private void initView() {
 
         NewGoodsBeanlist = new ArrayList<>();
-        mAdapter = new newAdapter(this, NewGoodsBeanlist);
+        mAdapter = new BoutiqueAdapter(this, NewGoodsBeanlist);
         layoutManger = new GridLayoutManager(this, I.COLUM_NUM, GridLayoutManager.VERTICAL, false);
         layoutManger.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
