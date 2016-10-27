@@ -8,30 +8,26 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.ucai.fulicenter.bean.CartBean;
 import cn.ucai.fulicenter.bean.UserBean;
 import cn.ucai.fulicenter.myAdapter.CartAdapter;
 import cn.ucai.fulicenter.net.NetDao;
-import cn.ucai.fulicenter.utils.L;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import day.myfulishe.R;
 import day.myfulishe.activity.FuLiCenterApplication;
 
 public class Fragment_cart extends Fragment {
-    @Bind(R.id.tv_sums)
-    TextView tvSums;
-    @Bind(R.id.iv_save)
-    TextView ivSave;
+
     @Bind(R.id.tv_refresh)
     TextView tvRefresh;
-    @Bind(R.id.fag_rlv_newgoods)
-    RecyclerView fagRlvNewgoods;
     @Bind(R.id.srl)
     SwipeRefreshLayout srl;
 
@@ -39,6 +35,16 @@ public class Fragment_cart extends Fragment {
     ArrayList<CartBean> cartBeanArrayList;
     public CartAdapter mAdapter;
     public LinearLayoutManager layoutManger;
+    @Bind(R.id.tv_sums)
+    TextView tvSums;
+    @Bind(R.id.iv_save)
+    TextView tvSave;
+    @Bind(R.id.layout_cart)
+    LinearLayout layoutCart;
+    @Bind(R.id.tv_nothing)
+    TextView tvNothing;
+    @Bind(R.id.fag_rlv_newgoods)
+    RecyclerView fagRlvNewgoods;
 
     public Fragment_cart() {
     }
@@ -55,7 +61,20 @@ public class Fragment_cart extends Fragment {
         fagRlvNewgoods.setAdapter(mAdapter);
         initData();
         setListener();
+        initView();
         return view;
+    }
+
+    private void initView() {
+        setCarLayout(false);
+
+    }
+
+    private void setCarLayout(boolean hasCart) {
+        layoutCart.setVisibility(hasCart ? View.VISIBLE : View.GONE);
+        tvNothing.setVisibility(hasCart ? View.GONE : View.VISIBLE);
+        fagRlvNewgoods.setVisibility(hasCart ? View.VISIBLE : View.GONE);
+        sumPrice();
     }
 
     private void setListener() {
@@ -72,31 +91,39 @@ public class Fragment_cart extends Fragment {
     }
 
     private void initData() {
+        downloadCart();
+
+    }
+
+    private void downloadCart() {
         final UserBean userBean = FuLiCenterApplication.getUserBean();
-        if (userBean == null) {
-            return;
-        } else {
+        if (userBean != null) {
             NetDao.downUserCart(getContext(), userBean.getMuserName(), new OkHttpUtils.OnCompleteListener<CartBean[]>() {
                 @Override
                 public void onSuccess(CartBean[] result) {
-                    for (CartBean c : result) {
-                        L.e("Cart:"+c.toString());
-                    }
                     OkHttpUtils utils = new OkHttpUtils(getContext());
                     ArrayList list = utils.array2List(result);
-                    mAdapter.inintContact(list);
                     tvRefresh.setVisibility(View.GONE);
                     srl.setRefreshing(false);
+                    if (list != null && list.size() > 0) {
+                        mAdapter.inintContact(list);
+                        setCarLayout(true);
+                    } else {
+                        setCarLayout(false);
+                    }
+
                 }
 
                 @Override
                 public void onError(String error) {
-
+                    setCarLayout(false);
+                    tvRefresh.setVisibility(View.GONE);
+                    srl.setRefreshing(false);
                 }
 
             });
-        }
 
+        }
     }
 
 
@@ -104,5 +131,32 @@ public class Fragment_cart extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+    @OnClick(R.id.Buy)
+    public void onClick() {
+    }
+
+    private void sumPrice() {
+        int sumPrice = 0;
+        int ranPrice = 0;
+        if (cartBeanArrayList != null && cartBeanArrayList.size() > 0) {
+            for (CartBean c : cartBeanArrayList) {
+                if (c.isChecked()) {
+                    sumPrice += getPrice(c.getGoods().getCurrencyPrice()) * c.getCount();
+                    ranPrice += getPrice(c.getGoods().getRankPrice()) * c.getCount();
+                }
+            }
+            tvSums.setText("合计:￥" + Double.valueOf(sumPrice));
+            tvSave.setText("节省:￥" + Double.valueOf(sumPrice - ranPrice));
+        } else {
+            tvSums.setText("合计:￥0");
+            tvSave.setText("节省:￥0");
+        }
+    }
+
+    private int getPrice(String price) {
+        price = price.substring(price.indexOf("￥") + 1);
+        return Integer.valueOf(price);
     }
 }

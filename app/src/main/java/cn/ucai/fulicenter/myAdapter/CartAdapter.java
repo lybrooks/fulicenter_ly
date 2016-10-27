@@ -197,9 +197,6 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
 
-    public interface MyOnClickListener {
-        void OnClick(View view, int position);
-    }
 
     static class FooterViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.tv_item_footer)
@@ -225,8 +222,6 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ImageView ivDeleteCart;
         @Bind(R.id.tv_good_prize)
         TextView tvGoodPrize;
-        @Bind(R.id.RL_Catr)
-        RelativeLayout RLCatr;
 
         ContactViewHolder(View view) {
             super(view);

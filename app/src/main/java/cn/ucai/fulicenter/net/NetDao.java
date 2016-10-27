@@ -6,6 +6,7 @@ import java.io.File;
 
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.bean.BoutiqueBean;
+import cn.ucai.fulicenter.bean.CartBean;
 import cn.ucai.fulicenter.bean.CategoryChildBean;
 import cn.ucai.fulicenter.bean.CategoryGroupBean;
 import cn.ucai.fulicenter.bean.CollectBean;
@@ -236,5 +237,42 @@ public class NetDao {
                 .addParam(I.Collect.USER_NAME, name)
                 .targetClass(MessageBean.class)
                 .execute(listener);
+    }
+
+    /**
+     * 下载用户购物车信息
+     */
+    public static void downUserCart(Context context, String name, OkHttpUtils.OnCompleteListener<CartBean[]> listener) {
+        OkHttpUtils<CartBean[]> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_FIND_CARTS)
+                .addParam(I.Cart.USER_NAME, name)
+                .targetClass(CartBean[].class)
+                .execute(listener);
+    }
+
+    /**
+     * 删除用户购物车中的商品
+     */
+    public static void deleteCart(Context context, int goodId, OkHttpUtils.OnCompleteListener<MessageBean> listener) {
+        OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_DELETE_CART)
+                .addParam(I.Cart.ID, String.valueOf(goodId))
+                .targetClass(MessageBean.class)
+                .execute(listener);
+    }
+
+    /**
+     * 添加商品至购物车
+     */
+    public static void addCar(Context context, int goodId, String username, OkHttpUtils.OnCompleteListener<MessageBean> listener) {
+        OkHttpUtils<MessageBean> utils = new OkHttpUtils<>(context);
+        utils.setRequestUrl(I.REQUEST_ADD_CART)
+                .addParam(I.Cart.GOODS_ID, String.valueOf(goodId))
+                .addParam(I.Cart.USER_NAME, username)
+                .addParam(I.Cart.COUNT, 1 + "")
+                .addParam(I.Cart.IS_CHECKED, false + "")
+                .targetClass(MessageBean.class)
+                .execute(listener);
+
     }
 }
