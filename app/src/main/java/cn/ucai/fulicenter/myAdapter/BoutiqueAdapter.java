@@ -24,9 +24,9 @@ import day.myfulishe.R;
  */
 
 
-public class newAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class BoutiqueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public newAdapter(Context context, ArrayList<NewGoodsBean> contactList) {
+    public BoutiqueAdapter(Context context, ArrayList<NewGoodsBean> contactList) {
         this.context = context;
         this.contactList = contactList;
     }

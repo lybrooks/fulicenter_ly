@@ -141,12 +141,7 @@ public class CategoryAdapter extends BaseExpandableListAdapter {
         final ImageView img  = (ImageView) convertView.findViewById(R.id.iv_categoty_btn);
         ImageLoader.downloadImg(getContext(),ivcategory,Grouplist.get(groupPosition).getImageUrl());
         img.setImageResource(isExpanded?R.mipmap.expand_off:R.mipmap.expand_on);
-   /*     ImageLoader.build(I.DOWNLOAD_IMG_URL + Grouplist.get(groupPosition).getImageUrl())
-                .height(200)
-                .width(200)
-                .imageView(ivcategory)
-                .listener(parent)
-                .showImage(context);*/
+
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
