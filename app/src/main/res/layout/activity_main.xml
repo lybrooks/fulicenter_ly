@@ -59,16 +59,7 @@
                 android:layout_weight="1"
                 android:gravity="center">
 
-                <TextView
-                    android:id="@+id/tv_cart_hint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="0dp"
-                    android:layout_marginLeft="30sp"
-                    android:background="@drawable/cart_hint"
-                    android:text="55"
-                    android:textColor="#fcfc04"
-                    android:textSize="10dp" />
+
 
                 <RadioButton
                     android:id="@+id/rb_item_cart"
