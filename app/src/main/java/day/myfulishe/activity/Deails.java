@@ -21,6 +21,7 @@ import cn.ucai.fulicenter.bean.MessageBean;
 import cn.ucai.fulicenter.bean.UserBean;
 import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.CommonUtils;
+import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import cn.ucai.fulicenter.views.FlowIndicator;
 import cn.ucai.fulicenter.views.SlideAutoLoopView;
@@ -117,21 +118,27 @@ public class Deails extends AppCompatActivity {
                 this.finish();
                 break;
             case R.id.iv_main_cart:
-                NetDao.addCar(mComtext, goodId, user.getMuserName(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
-                    @Override
-                    public void onSuccess(MessageBean result) {
-                        if (result.isSuccess()) {
-                            CommonUtils.showShortToast("添加成功");
-                        } else {
+                UserBean userBean = FuLiCenterApplication.getUserBean();
+                if (userBean != null) {
+                    NetDao.addCar(mComtext, goodId, userBean.getMuserName(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                        @Override
+                        public void onSuccess(MessageBean result) {
+                            if (result != null && result.isSuccess()) {
+                                CommonUtils.showShortToast("添加购物车成功");
+                            } else {
+                                CommonUtils.showShortToast("添加购物车失败");
+                            }
+                        }
+
+                        @Override
+                        public void onError(String error) {
                             CommonUtils.showShortToast("添加失败");
                         }
-                    }
+                    });
+                } else {
+                    MFGT.gotoLogin(mComtext);
+                }
 
-                    @Override
-                    public void onError(String error) {
-                        CommonUtils.showShortToast("添加失败");
-                    }
-                });
                 break;
             case R.id.iv_collect:
                 if (isCollected) {

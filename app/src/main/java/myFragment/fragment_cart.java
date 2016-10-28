@@ -74,7 +74,6 @@ public class Fragment_cart extends Fragment {
 
     private void initView() {
         setCarLayout(false);
-
     }
 
     private void setCarLayout(boolean hasCart) {
@@ -85,10 +84,15 @@ public class Fragment_cart extends Fragment {
     }
 
     private void setListener() {
+        OnRefresh();
         IntentFilter flter = new IntentFilter(I.BROADCAST_UPDATE_CART);
         mReceiver = new updateCartReceiver();
         getContext().registerReceiver(mReceiver, flter);
 
+
+    }
+
+    private void OnRefresh() {
         srl.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -96,14 +100,13 @@ public class Fragment_cart extends Fragment {
                 srl.setRefreshing(true);
                 srl.setEnabled(true);
                 tvRefresh.setVisibility(View.VISIBLE);
-                initData();
+                downloadCart();
             }
         });
     }
 
     private void initData() {
         downloadCart();
-
     }
 
     private void downloadCart() {
@@ -117,13 +120,13 @@ public class Fragment_cart extends Fragment {
                     tvRefresh.setVisibility(View.GONE);
                     srl.setRefreshing(false);
                     if (list != null && list.size() > 0) {
+                        cartBeanArrayList.clear();
                         cartBeanArrayList.addAll(list);
                         mAdapter.inintContact(list);
                         setCarLayout(true);
                     } else {
                         setCarLayout(false);
                     }
-
                 }
 
                 @Override
@@ -176,7 +179,14 @@ public class Fragment_cart extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             sumPrice();
+            setCarLayout(cartBeanArrayList != null && cartBeanArrayList.size() > 0);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        downloadCart();
     }
 
     @Override

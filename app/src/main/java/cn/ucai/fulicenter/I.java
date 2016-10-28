@@ -74,6 +74,7 @@ public interface I {
     int CAT_ID = 0;
     int REQUEST_CODE_NICK = 103;
     String BROADCAST_UPDATE_CART = "update.cart";
+    String ACTION_CAR_DEL = "cart_delete";
 
     interface Goods {
         String KEY_RESULT = "result";

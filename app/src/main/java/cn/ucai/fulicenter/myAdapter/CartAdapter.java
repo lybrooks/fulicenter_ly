@@ -204,7 +204,6 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         context.sendBroadcast(new Intent(I.BROADCAST_UPDATE_CART));
                         tvGoodCount.setText("(" + cartBean.getCount() + ")");
                         tvGoodPrize.setText("￥" + cartBean.getCount() * getPrice(cartBean.getGoods().getCurrencyPrice()));
-
                     }
                 }
 
@@ -244,7 +243,6 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     }
                 });
             } else {
-
                 NetDao.deleteCart(context, cartBean.getId(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
                     @Override
                     public void onSuccess(MessageBean result) {

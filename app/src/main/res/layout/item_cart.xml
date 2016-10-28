@@ -17,8 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
-            android:background="@mipmap/checkbox_normal"
-            android:button="@drawable/checkbox_style"
+            style="@style/CustomCheckboxTheme"
             />
 
         <ImageView
@@ -75,7 +74,7 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/tv_good_prize"
+            android:id="@+id/tv_good_prizes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
