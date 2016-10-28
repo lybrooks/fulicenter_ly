@@ -1,5 +1,6 @@
 package cn.ucai.fulicenter.myAdapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +25,7 @@ import cn.ucai.fulicenter.bean.MessageBean;
 import cn.ucai.fulicenter.net.NetDao;
 import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.ImageLoader;
+import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import day.myfulishe.R;
 
@@ -137,12 +139,6 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    private void removethis(CartBean goodsBean) {
-        this.contactList.remove(goodsBean);
-        notifyDataSetChanged();
-    }
-
-
     @Override
     public int getItemCount() {
         return contactList == null ? 0 : contactList.size() + 1;
@@ -167,7 +163,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    static class ContactViewHolder extends RecyclerView.ViewHolder {
+    class ContactViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.iv_goods_img)
         ImageView ivGoodsImg;
@@ -179,7 +175,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView tvGoodCount;
         @Bind(R.id.iv_deleteCart)
         ImageView ivDeleteCart;
-        @Bind(R.id.tv_good_prize)
+        @Bind(R.id.tv_good_prizes)
         TextView tvGoodPrize;
         @Bind(R.id.cb_checkBox)
         CheckBox mCbCartSelested;
@@ -187,6 +183,13 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ContactViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
+        }
+
+        @OnClick({R.id.iv_goods_img,R.id.tv_good_prizes,R.id.tv_good_name})
+        public void gotoGoodDetail(){
+            int position = (int) ivAddcart.getTag();
+            final CartBean cartBean = contactList.get(position);
+            MFGT.gotoGoodsDtails((Activity) context,cartBean.getGoodsId());
         }
 
         @OnClick(R.id.iv_addcart)
@@ -220,7 +223,7 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @OnClick(R.id.iv_deleteCart)
         public void deleteCart() {
-            int position = (int) ivAddcart.getTag();
+            final int position = (int) ivAddcart.getTag();
             final CartBean cartBean = contactList.get(position);
             if (cartBean.getCount() > 1) {
                 NetDao.updateCar(context, cartBean.getId(), cartBean.getCount() - 1, new OkHttpUtils.OnCompleteListener<MessageBean>() {
@@ -241,11 +244,15 @@ public class CartAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     }
                 });
             } else {
+
                 NetDao.deleteCart(context, cartBean.getId(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
                     @Override
                     public void onSuccess(MessageBean result) {
                         if (result.isSuccess()) {
                             CommonUtils.showShortToast("删除成功");
+                            contactList.remove(position);
+                            context.sendBroadcast(new Intent(I.BROADCAST_UPDATE_CART));
+                            notifyDataSetChanged();
                         }
                     }
 
