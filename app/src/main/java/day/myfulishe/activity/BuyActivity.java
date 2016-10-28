@@ -26,8 +26,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.bean.CartBean;
+import cn.ucai.fulicenter.bean.MessageBean;
 import cn.ucai.fulicenter.bean.UserBean;
 import cn.ucai.fulicenter.net.NetDao;
+import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import day.myfulishe.R;
 
@@ -181,7 +183,7 @@ public class BuyActivity extends AppCompatActivity implements PaymentHandler {
 
         try {
             bill.put("order_no", orderNo);
-            bill.put("amount", rankPrice*100);
+            bill.put("amount", rankPrice * 100);
             bill.put("extras", extras);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -220,6 +222,35 @@ public class BuyActivity extends AppCompatActivity implements PaymentHandler {
                     e.printStackTrace();
                 }
             }
+            int resultCode = data.getExtras().getInt("code");
+            switch (resultCode) {
+                case 1:
+                    paySuccess();
+                    CommonUtils.showLongToast("支付完成");
+                    break;
+                case -1:
+                    CommonUtils.showLongToast("支付失败");
+                    finish();
+                    break;
+
+            }
         }
+    }
+
+    private void paySuccess() {
+        for (String id : ids) {
+            NetDao.deleteCart(mContext, Integer.parseInt(id), new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                @Override
+                public void onSuccess(MessageBean result) {
+
+                }
+
+                @Override
+                public void onError(String error) {
+
+                }
+            });
+        }
+        finish();
     }
 }
