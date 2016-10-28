@@ -1,6 +1,7 @@
 package cn.ucai.fulicenter.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.ArrayList;
 import cn.ucai.fulicenter.I;
 import cn.ucai.fulicenter.bean.CategoryChildBean;
 import day.myfulishe.activity.Boutique;
+import day.myfulishe.activity.BuyActivity;
 import day.myfulishe.activity.CategoryDetails;
 import day.myfulishe.activity.Collections;
 import day.myfulishe.activity.Deails;
@@ -94,5 +96,9 @@ public class MFGT {
 
     public static void gotoCollection(Activity comtext) {
         startActivity(comtext, Collections.class);
+    }
+
+    public static void goPayActivity(Context context) {
+        startActivity((Activity) context, BuyActivity.class);
     }
 }

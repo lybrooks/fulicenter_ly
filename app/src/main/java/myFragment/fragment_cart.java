@@ -25,6 +25,7 @@ import cn.ucai.fulicenter.bean.CartBean;
 import cn.ucai.fulicenter.bean.UserBean;
 import cn.ucai.fulicenter.myAdapter.CartAdapter;
 import cn.ucai.fulicenter.net.NetDao;
+import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import day.myfulishe.R;
 import day.myfulishe.activity.FuLiCenterApplication;
@@ -148,9 +149,7 @@ public class Fragment_cart extends Fragment {
         ButterKnife.unbind(this);
     }
 
-    @OnClick(R.id.Buy)
-    public void onClick() {
-    }
+
 
     private void sumPrice() {
         int sumPrice = 0;
@@ -173,6 +172,11 @@ public class Fragment_cart extends Fragment {
     private int getPrice(String price) {
         price = price.substring(price.indexOf("￥") + 1);
         return Integer.valueOf(price);
+    }
+
+    @OnClick(R.id.Buy)
+    public void onClick() {
+        MFGT.goPayActivity(getContext());
     }
 
     class updateCartReceiver extends BroadcastReceiver {

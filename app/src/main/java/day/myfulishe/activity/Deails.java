@@ -124,12 +124,11 @@ public class Deails extends AppCompatActivity {
                         @Override
                         public void onSuccess(MessageBean result) {
                             if (result != null && result.isSuccess()) {
-                                CommonUtils.showShortToast("添加购物车成功");
+                                CommonUtils.showLongToast("添加购物车成功");
                             } else {
                                 CommonUtils.showShortToast("添加购物车失败");
                             }
                         }
-
                         @Override
                         public void onError(String error) {
                             CommonUtils.showShortToast("添加失败");
@@ -233,21 +232,24 @@ public class Deails extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        NetDao.isCollected(mComtext, goodId, user.getMuserName(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
-            @Override
-            public void onSuccess(MessageBean result) {
-                if (result.isSuccess()) {
-                    isCollected = true;
-                } else {
-                    isCollected = false;
+        UserBean userBean = FuLiCenterApplication.getUserBean();
+        if (userBean != null) {
+            NetDao.isCollected(mComtext, goodId, userBean.getMuserName(), new OkHttpUtils.OnCompleteListener<MessageBean>() {
+                @Override
+                public void onSuccess(MessageBean result) {
+                    if (result.isSuccess()) {
+                        isCollected = true;
+                    } else {
+                        isCollected = false;
+                    }
+                    updateGoodsCollectStatus();
                 }
-                updateGoodsCollectStatus();
-            }
 
-            @Override
-            public void onError(String error) {
+                @Override
+                public void onError(String error) {
 
-            }
-        });
+                }
+            });
+        }
     }
 }
