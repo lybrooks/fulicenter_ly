@@ -25,6 +25,7 @@ import cn.ucai.fulicenter.bean.CartBean;
 import cn.ucai.fulicenter.bean.UserBean;
 import cn.ucai.fulicenter.myAdapter.CartAdapter;
 import cn.ucai.fulicenter.net.NetDao;
+import cn.ucai.fulicenter.utils.CommonUtils;
 import cn.ucai.fulicenter.utils.MFGT;
 import cn.ucai.fulicenter.utils.OkHttpUtils;
 import day.myfulishe.R;
@@ -53,6 +54,7 @@ public class Fragment_cart extends Fragment {
     RecyclerView fagRlvNewgoods;
 
     updateCartReceiver mReceiver;
+    String cartID = "";
 
     public Fragment_cart() {
     }
@@ -150,13 +152,14 @@ public class Fragment_cart extends Fragment {
     }
 
 
-
     private void sumPrice() {
         int sumPrice = 0;
         int ranPrice = 0;
+        cartID = "";
         if (cartBeanArrayList != null && cartBeanArrayList.size() > 0) {
             for (CartBean c : cartBeanArrayList) {
                 if (c.isChecked()) {
+                    cartID += c.getId() + ",";
                     sumPrice += getPrice(c.getGoods().getCurrencyPrice()) * c.getCount();
                     ranPrice += getPrice(c.getGoods().getRankPrice()) * c.getCount();
                 }
@@ -164,6 +167,7 @@ public class Fragment_cart extends Fragment {
             tvSums.setText("合计:￥" + Double.valueOf(sumPrice));
             tvSave.setText("节省:￥" + Double.valueOf(sumPrice - ranPrice));
         } else {
+            cartID = null;
             tvSums.setText("合计:￥0");
             tvSave.setText("节省:￥0");
         }
@@ -176,7 +180,11 @@ public class Fragment_cart extends Fragment {
 
     @OnClick(R.id.Buy)
     public void onClick() {
-        MFGT.goPayActivity(getContext());
+        if (cartID != null && cartID.length() > 0 && !cartID.equals("")) {
+            MFGT.goPayActivity(getContext(), cartID);
+        } else {
+            CommonUtils.showLongToast("亲,没有选中商品噢");
+        }
     }
 
     class updateCartReceiver extends BroadcastReceiver {

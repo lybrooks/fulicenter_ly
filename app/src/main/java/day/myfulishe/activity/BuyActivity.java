@@ -11,6 +11,7 @@ import android.widget.Toast;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.ucai.fulicenter.I;
 import day.myfulishe.R;
 
 public class BuyActivity extends AppCompatActivity {
@@ -33,6 +34,11 @@ public class BuyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_buy);
         ButterKnife.bind(this);
         initView();
+        initDara();
+    }
+
+    private void initDara() {
+        String cartIds = getIntent().getStringExtra(I.Cart.ID);
     }
 
     private void initView() {

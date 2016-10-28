@@ -98,7 +98,8 @@ public class MFGT {
         startActivity(comtext, Collections.class);
     }
 
-    public static void goPayActivity(Context context) {
-        startActivity((Activity) context, BuyActivity.class);
+    public static void goPayActivity(Context context, String cartId) {
+        Intent intent = new Intent(context, BuyActivity.class).putExtra(I.Cart.ID, cartId);
+        startActivity((Activity) context, intent);
     }
 }
