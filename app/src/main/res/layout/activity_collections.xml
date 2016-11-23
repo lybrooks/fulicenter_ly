@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="day.myfulishe.activity.Collections">
+    tools:context="day.myfulishe.controller.activity.Collections">
 
     <RelativeLayout
         android:layout_width="match_parent"

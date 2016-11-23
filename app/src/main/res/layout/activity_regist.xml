@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="day.myfulishe.activity.Regist"
+    tools:context="day.myfulishe.controller.activity.Regist"
     android:orientation="vertical"
     >
     <LinearLayout

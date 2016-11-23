@@ -17,28 +17,28 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
-        android:name=".activity.FuLiCenterApplication"
+        android:name="controller.activity.FuLiCenterApplication"
         android:allowBackup="true"
         android:icon="@mipmap/launcher"
         android:label="福利社"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity" />
-        <activity android:name=".activity.SplashActivity">
+        <activity android:name="controller.activity.MainActivity" />
+        <activity android:name="controller.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.Deails" />
-        <activity android:name=".activity.Boutique" />
-        <activity android:name=".activity.CategoryDetails" />
-        <activity android:name=".activity.Regist" />
-        <activity android:name=".activity.Login" />
-        <activity android:name=".activity.MySetting" />
-        <activity android:name=".activity.UpdateNick" />
-        <activity android:name=".activity.Collections" />
+        <activity android:name="controller.activity.Deails" />
+        <activity android:name="controller.activity.Boutique" />
+        <activity android:name="controller.activity.CategoryDetails" />
+        <activity android:name="controller.activity.Regist" />
+        <activity android:name="controller.activity.Login" />
+        <activity android:name="controller.activity.MySetting" />
+        <activity android:name="controller.activity.UpdateNick" />
+        <activity android:name="controller.activity.Collections" />
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -83,7 +83,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".activity.BuyActivity"></activity>
+        <activity android:name="controller.activity.BuyActivity"></activity>
         <!--start-->
         <!-- 通用权限 -->
         <uses-permission android:name="android.permission.INTERNET" />

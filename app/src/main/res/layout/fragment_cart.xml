@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="myFragment.Fragment_cart">
+    tools:context="controller.myFragment.Fragment_cart">
 
     <LinearLayout
         android:id="@+id/layout_cart"
@@ -83,7 +83,7 @@
                 android:id="@+id/fag_rlv_newgoods"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context="myFragment.Fragment_newgoods"></android.support.v7.widget.RecyclerView>
+                tools:context="controller.myFragment.Fragment_newgoods"></android.support.v7.widget.RecyclerView>
         </LinearLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 

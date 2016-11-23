@@ -2,7 +2,6 @@ package cn.ucai.fulicenter.views;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -20,14 +19,12 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import cn.ucai.fulicenter.I;
-
 import cn.ucai.fulicenter.bean.CategoryChildBean;
-import cn.ucai.fulicenter.utils.ConvertUtils;
-import cn.ucai.fulicenter.utils.ImageLoader;
-import cn.ucai.fulicenter.utils.MFGT;
+import model.utils.ConvertUtils;
+import model.utils.ImageLoader;
+import model.utils.MFGT;
 import day.myfulishe.R;
-import day.myfulishe.activity.CategoryDetails;
+import controller.activity.CategoryDetails;
 
 /**
  * 显示分类中当前所属小类的列表
